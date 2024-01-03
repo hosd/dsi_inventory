@@ -1,0 +1,220 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/*==========  Non-Mobile First Method  ==========*/
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1920px) {
+
+    
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1536px) {
+
+    .login_left{
+        padding: 120px 120px;
+    }
+
+    .login_left .heading_left h1{
+        font-size: 30px;
+    }
+
+    .login_left button{
+        font-size: 14px;
+    }
+
+    #forgot_pwd .login_left, #reset_pwd .login_left{
+        padding: 180px 120px;
+    }
+
+    .login_left a{
+        font-size: 14px;
+    }
+
+    .login_btn{
+        margin-top: 5px;
+    }
+
+    .sidebar_menu .menu_li{
+        padding: 10px 10px;
+        font-size: 13px;
+    }
+
+    .sidebar_accordion button{
+        padding: 10px 6px 10px 10px;
+    }
+
+    .sidebar_accordion .acc_body_li{
+        padding: 10px;
+    }
+
+    .db_right h2{
+        font-size: 26px;
+    }
+
+    .accordion-button::after {
+        background-size: 0.5rem;
+        margin-top: 8px;
+    }
+    
+    .accordion-button:not(.collapsed)::after{
+        background-size: 0.75rem;
+    }
+
+    .login_right_content img{
+        width: 40%;
+    }
+
+    .login_right h1{
+        font-size: 34px;
+    }
+
+    .login_left input, .login_btn{
+        height: 42px;
+    }
+
+    .header_bar .add_btn button{
+        font-size: 13px;
+        margin: 12px 0;
+    }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1366px) {
+
+	
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1280px) {
+
+
+
+}
+
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1199px) {
+
+	
+
+}
+
+
+/* Large Devices, Wide Screens */
+@media only screen and (max-width : 1024px) {
+
+	.login_left{
+        padding: 150px 50px;
+    }
+    .sidebar_accordion button{
+        padding: 15px 15px;
+    }
+    .login_right_content img{
+        width: 60%;
+    }
+    .login_right h1{
+        font-size: 28px;
+    }
+    #forgot_pwd .login_left, #reset_pwd .login_left{
+        padding: 170px 50px;
+    }
+
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (max-width : 991px) {
+
+
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (max-width : 768px) {
+    .db_right {
+        margin-left: 0;
+    }
+
+    .db_summary_card{
+        min-height: auto !important;
+    }
+	
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 767px) {
+
+
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 575px) {
+    
+	.login_left{
+        padding: 70px 30px;
+    }
+
+    .login_right h1{
+        font-size: 20px;
+    }
+
+    .dashboard_table .view_more{
+        margin-top: 15px;
+    }
+
+    .db_right {
+        margin-left: 0;
+    }
+
+    #forgot_pwd .login_left, #reset_pwd .login_left{
+        padding: 100px 30px;
+    }
+    .popup_form{
+        padding: 0px 15px;
+    }
+
+    .db_summary_card h5{
+        font-size: 16px;
+    }
+
+    .db_summary_card h1{
+        font-family: 'Oswald', sans-serif;
+        font-size: 25px;
+    }
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+
+
+}
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 375px) {
+    .db_summary_card h5{
+        font-size: 14px;
+    }
+
+}
+
+
+/* Custom, iPhone Retina */
+@media only screen and (max-width : 360px) {
+
+
+
+}
+
+
+@media only screen and (max-width : 320px) {
+
+
+
+}

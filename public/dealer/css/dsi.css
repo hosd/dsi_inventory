@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Oswald:wght@300;400;500;600&display=swap');
+
+/*****************************/
+/*********common css**************/
+
+:root{
+    font-family: 'Lato', sans-serif;
+    font-family: 'Oswald', sans-serif;
+}
+
+body{
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+/*****************************/
+/*********common css**************/
+
+/*****************************/
+/*********login**************/
+
+.login_left{
+    padding: 230px 180px;
+}
+
+.login_left p, .login_left h1{
+    font-family: 'Oswald', sans-serif;
+}
+
+.login_left a{
+    color: #00AEEF;
+}
+
+.login_left input, .login_btn{
+    border-radius: 0;
+    height: 52px;
+}
+
+.login_btn{
+    background-color: red;
+    border: none;
+    margin-top: 10px;
+}
+
+.login_btn:hover{
+    background-color: rgb(214, 0, 0);
+    border: none;
+}
+
+.login_right{
+    background-image: url("../images/login-bg-image.jpg");
+    background-repeat:no-repeat;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.login_right h1{
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.login_right_content{
+    margin-top: 200px;
+    margin-left: 130px;
+}
+
+.mob_login_title h1{
+    font-size: 20px ;
+    color: #1B1B1B;
+}
+
+/*****************************/
+/*********login**************/
+
+/*****************************/
+/*********forgot/reset**************/
+
+.return_login p, .reset_pwd_txt p{
+    font-family: 'Lato', sans-serif;
+}
+
+#forgot_pwd .login_left, #reset_pwd .login_left{
+    padding: 290px 180px;
+}
+
+/*****************************/
+/*********forgot/reset**************/
+
+/*****************************/
+/*********dashboard**************/
+
+.sidebar_menu a, .mobile_menu a{
+    color: white;
+}
+
+.sidebar_menu{
+    position: fixed;
+    background-image: url("../images/Bg_image.jpg");
+    background-repeat:no-repeat;
+    height: 100vh;
+    background-size: cover;
+    background-position: fixed;
+}
+
+.sidebar_menu span, .mobile_menu span{
+    padding-right: 10px;
+}
+
+.sidebar_menu_content{
+    position: fixed;
+    height: 100%;
+    background-color: #212529;
+}
+
+.sidebar_menu .active, .mobile_menu .active{
+    color: white;
+    border-right: 3px solid rgb(255, 255, 255);
+    background-color: red;
+}
+
+.sidebar_menu .menu_li{
+    padding: 20px 20px;
+    border-bottom: 1px solid white;
+}
+
+.mobile_menu{
+    background-color: #212529;
+}
+
+.mobile_menu .acc_body_li{
+    padding: 15px 15px;
+    border-bottom: 1px solid white;
+}
+
+.mobile_menu .menu_li{
+    padding: 15px 15px;
+    border-bottom: 1px solid white;
+}
+
+.mobile_menu .sidebar_accordion{
+    margin-left: 10px;
+}
+
+.sidebar_accordion h2{
+    background-color: transparent;
+}
+
+.accordion-button{
+    padding: 0;
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar_accordion .accordion-body{
+    background-color: rgba(225,225,225, 0.3);
+    padding: 0;
+}
+
+.accordion-button:not(.collapsed){
+    background-color: transparent;
+    color: white;
+}
+
+.accordion-button::after {
+    background-image: url("../images/arrow_1.svg");
+    background-size: 0.75rem;
+}
+
+.accordion-button:not(.collapsed)::after{
+    background-image: url("../images/arrow_2.svg");
+    background-size: 1.25rem;
+}
+
+.sidebar_accordion .acc_body_li{
+    border: none;
+    padding: 15px ;
+}
+
+.sidebar_accordion button{
+    font-size: 13px;
+    padding: 20px 20px;
+    border-bottom: 1px solid white;
+}
+
+/* .sidebar_accordion li:hover{
+    background-color: #212529;
+} */
+
+.sticky_header{
+    padding: 10px;
+}
+
+.sticky_header a{
+    padding: 0 10px;
+}
+
+.heading_text{
+    padding: 10px 0;
+}
+
+.header_bar .add_btn .header_btn button{
+    font-size: 14px;
+    border-radius: 0px;
+    background-color: #00AEEF;
+    border: none;
+    margin: 15px 0;
+}
+
+.pending_orders_table{
+    font-size: 13px;
+}
+
+.pending_orders_table button{
+    font-size: 13px;
+}
+
+.db_right{
+    margin-left: 16.66666667%;
+}
+
+.db_right .view_more a{
+    color:#00AEEF;
+}
+
+.dashboard_table{
+    border-radius: 6px;
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.dashboard_table .dropdown button{
+    border: 1px solid #F56300;
+    border-radius: 6px;
+    background-color: white;
+    color: #F56300;
+    padding: 2px 10px;
+}
+
+.dashboard_table h3{
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+.dashboard_table thead{
+    background-color: #56595B;
+    color: white;
+}
+
+.page-item.active .page-link{
+    background: #00AEEF;
+    border-color: #00AEEF;
+}
+
+a.page-link{
+    color: #00AEEF;
+}
+
+.accordion-item {
+    background-color: transparent;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+/*****************************/
+/*********dashboard**************/
+
+
+/*****************************/
+/*********profile management**************/
+
+.user_details{
+    font-size: 13px;
+    border-radius: 6px;
+    background-color: white;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.user_details button{
+    font-size: 13px;
+    border-radius: 0px;
+    background: #00AEEF;
+    border-color: #00AEEF;
+}
+
+.user_details button:hover{
+    background: #00AEEF;
+    border-color: #00AEEF;
+}
+
+.user_details input{
+    font-size: 13px;
+    border-radius: 0px;
+}
+
+/*****************************/
+/*********profile management**************/
+
+.popup_form_content select, .popup_form_content input{
+    font-size: 13px;
+}
+
+.popup_form h5{
+    font-family: 'Oswald', sans-serif;
+    color: white;
+}
+
+.popup_form .modal-header{
+    background-color: #56595B;
+}
+
+.popup_form .submit_btn{
+    background-color: #00AEEF;
+    border: none;
+    border-radius: 0px;
+}
+
+.popup_form .close_btn{
+    border: none;
+    border-radius: 0px;
+}
+
