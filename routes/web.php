@@ -44,11 +44,10 @@ Route::get('/make-complaint', function () {
     //return view('welcome');
 });
 
-Route::get('/dealer-login', [DealerloginContoller::class, 'showLoginForm'])
-    ->middleware('guest')
-    ->name('dealer-login');
+Route::get('/dealer-login', [DealerloginContoller::class, 'showLoginForm'])->name('dealer-login');
+
 Route::post('/dealer-login', [DealerloginContoller::class, 'login'])
-    ->middleware('guest');
+    ->middleware('dealer');
 
 
 Route::get('/forgot-dealer-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
@@ -76,7 +75,8 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
 
     /////////////////////////// DEALER LOGIN /////////////////////////////////
    
-    Route::middleware(['auth:dealer'])->group(function () {
+    // Route::middleware(['auth:dealer'])->group(function () {
+    Route::group(['middleware' => ['auth:dealer', 'dealer']], function () {
     Route::get('dealer/dashboard', [DealerloginContoller::class, 'dashboard'])->name('dealer/dashboard');     
     
     //stocks
@@ -103,7 +103,7 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
     Route::post('/update-order-status', [DealerloginContoller::class, 'updateOrderStatus'] )->name('update-order-status');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth:web']], function () {
     // Route::get('/dashboard', function () {
     //     return view('dashboard');
     // });

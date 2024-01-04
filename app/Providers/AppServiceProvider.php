@@ -35,10 +35,8 @@ class AppServiceProvider extends ServiceProvider
         if(config('app.env') === 'production') {
             \URL::forceScheme('https');
         }
-
         View::composer('*', function ($view) {
             if (Auth::check()) {
-                if(!session('dealer_data')){
                 // $menuItems = DynamicMenu::join('privilage','privilage.iFormID','=','dynamic_menu.id')->where('privilage.iUserTypeID',1)->where('dynamic_menu.show_menu',1)->where('dynamic_menu.parent_id','0')->get();
                 $menuItems = DynamicMenu::where('dynamic_menu.show_menu', 1)->where('dynamic_menu.parent_id', '0')->orderBy('parent_order', 'ASC')->get();
                 view()->share('menuItems', $menuItems);
@@ -74,7 +72,6 @@ class AppServiceProvider extends ServiceProvider
                 }
                 view()->share('permissionHave', $arrPermission);
                 view()->share('arrParentID', $arrParentID);
-                } 
             }
         });
     }

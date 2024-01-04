@@ -110,11 +110,11 @@ class DealerloginContoller extends Controller {
     }
 
     public function logout(Request $request) {
-        Auth::logout();
+        Auth::guard('dealer')->logout();
 
-        $request->session()->invalidate();
+        // $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
         return redirect('dealer-login');
     }

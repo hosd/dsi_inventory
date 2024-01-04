@@ -402,6 +402,7 @@ class DealersContoller extends Controller
             
            
             $id= User::create($data_arry);
+            $id->assignRole('Dealer User');
              \LogActivity::addToLog('New dealer user'.$request->name.' added('.$id->id.').');
             return redirect('new-dealer-user/'.$dealerID)->with('success', 'New dealer user created successfully');
         }else{
