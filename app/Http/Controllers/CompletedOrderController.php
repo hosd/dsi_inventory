@@ -52,7 +52,7 @@ class CompletedOrderController extends Controller
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('http://projects80.tekgeeks.net/dsi_web/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {
@@ -83,7 +83,7 @@ class CompletedOrderController extends Controller
 
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('http://projects80.tekgeeks.net/dsi_web/api/get-pickup-orders?status=' . $status . '&dealerID=' . '');
+                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . '');
 
             $resultdata = $apidata->json(); 
             if (empty($resultdata['orderList'])) {
@@ -217,7 +217,7 @@ class CompletedOrderController extends Controller
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('http://projects80.tekgeeks.net/dsi_web/api/get-order-details?orderID=' . $ID);
+                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $ID);
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];

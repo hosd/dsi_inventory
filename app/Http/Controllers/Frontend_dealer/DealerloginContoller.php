@@ -51,7 +51,7 @@ class DealerloginContoller extends Controller {
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('http://projects80.tekgeeks.net/dsi_web/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
+                ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
         $resultdata = $apidata->json();
         if ($resultdata) {
@@ -639,7 +639,7 @@ class DealerloginContoller extends Controller {
                               return $dropdownHtml;
                               }) */
                             ->addColumn('edit', function ($row) {
-                                $edit_url = route('view-order-details', encrypt($row['orderID']));
+                                $edit_url = route('view-order-details', $row['orderRef']);
                                 $btn = '<a  class="btn btn-primary btn-sm" href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
                                 return $btn;
                             })
@@ -675,7 +675,7 @@ class DealerloginContoller extends Controller {
             return Datatables::of($resultdata['orderList'])
                             ->addIndexColumn()
                             ->addColumn('edit', function ($row) {
-                                $edit_url = route('view-order-details', encrypt($row['orderID']));
+                                $edit_url = route('view-order-details', $row['orderRef']);
                                 $btn = '<a  class="btn btn-primary btn-sm" href="' . $edit_url . '"><i class="fa fa-eye"></i></a>';
                                 return $btn;
                             })
@@ -712,7 +712,7 @@ class DealerloginContoller extends Controller {
             return Datatables::of($resultdata['orderList'])
                             ->addIndexColumn()
                             ->addColumn('edit', function ($row) {
-                                $edit_url = route('view-order-details', encrypt($row['orderID']));
+                                $edit_url = route('view-order-details', $row['orderRef']);
                                 $btn = '<a  class="btn btn-primary btn-sm" href="' . $edit_url . '"><i class="fa fa-eye"></i></a>';
                                 return $btn;
                             })
@@ -732,12 +732,12 @@ class DealerloginContoller extends Controller {
     }
 
     public function view_order_details($id) {
-        $ID = decrypt($id);
+
         $token = $this->generatedToken();
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $ID);
+                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];
@@ -761,7 +761,7 @@ class DealerloginContoller extends Controller {
         $token = $this->generatedToken();
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('http://projects80.tekgeeks.net/dsi_web/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
+                ])->post('https://dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
         $resultdata = $apidata->json();
         \LogActivity::addToAPILog('order status updated - orderRef: ' . $orderRef . ' Status: ' . $status . '. API response :' . $resultdata['message']);
 
