@@ -54,13 +54,12 @@ class DealerloginContoller extends Controller {
                 ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
         $resultdata = $apidata->json();
-        if ($resultdata) {
-            //$pendingout = count($resultdata['orderList']);
-          $pendingout = 0;
+
+        if (isset($resultdata['orderList']) && is_array($resultdata['orderList'])) {
+            $pendingout = count($resultdata['orderList']);
         } else {
             $pendingout = 0;
         }
-
 
         return view('frontend_dealer.dashboard')->with('count', $count)->with('pendingout', $pendingout);
     }
@@ -128,7 +127,7 @@ class DealerloginContoller extends Controller {
             // DB::enableQueryLog();
             $data = Dealer_stock::join('product_category', 'dealer_stock.categoryID', '=', 'product_category.id')
                     ->join('product', 'dealer_stock.productcode', '=', 'product.productcode')
-                    ->select('dealer_stock.*', 'product_category.name AS category', 'product.productcode as procode', 'product.id as proid')
+                    ->select('dealer_stock.*', 'product_category.name AS category', 'product.productcode as procode', 'product.id as proid', 'product.label_name')
                     ->where('dealer_stock.dealerID', auth()->user()->dealerID)
                     //->orderBy('product.productcode', 'ASC')
                     ->orderByRaw('CASE WHEN dealer_stock.quantity < dealer_stock.reorder_quantity THEN 0 ELSE 1 END, product.productcode ASC')
@@ -759,11 +758,29 @@ class DealerloginContoller extends Controller {
         $orderRef = $request->orderRef;
 
         $token = $this->generatedToken();
+        
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
                 ])->post('https://dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
         $resultdata = $apidata->json();
+
         \LogActivity::addToAPILog('order status updated - orderRef: ' . $orderRef . ' Status: ' . $status . '. API response :' . $resultdata['message']);
+
+        if($status == "cancelled"){
+            $apidata1 = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $token,
+                    ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
+            $resultdata1 = $apidata1->json();
+            $productlist = $resultdata1['ProductList'];
+
+            $dealerID = auth()->user()->dealerID;
+
+            foreach ($productlist as $product) {
+                Dealer_stock::where('dealerID', $dealerID)
+                            ->where('productcode', $product['ProductCode'])
+                            ->increment('quantity', $product['Quantity']);
+            }
+        }
 
         return redirect('dealer/pending-orders')->with('success', 'Status updated successfully. Order number :' . $orderRef);
     }

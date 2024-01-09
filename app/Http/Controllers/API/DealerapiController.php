@@ -45,6 +45,7 @@ class DealerapiController extends Controller {
         //  Retrieve dealers matching district and city
         $selectedDealers = DB::table('dealers')
                 ->join('address', 'dealers.addressID', '=', 'address.id')
+                ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
                 ->where('districtID', $data['district'])
                 ->where('cityID', $data['city'])
                 ->where('status', '1')
