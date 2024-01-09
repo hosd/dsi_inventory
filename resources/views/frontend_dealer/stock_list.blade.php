@@ -287,8 +287,8 @@
                             name: 'id'
                         },
                         {
-                            data: 'name',
-                            name: 'name',
+                            data: 'label_name',
+                            name: 'label_name',
                             "className": "text-center"
                         },
                         {

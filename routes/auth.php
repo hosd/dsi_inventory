@@ -217,5 +217,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cancelled-order-details/{id}', [CancelledOrderController::class, 'edit'])->name('cancelled-order-details');
     
     Route::get('report-list', [ReportController::class, 'index'])->name('report-list');
+    Route::get('dealer-commission-report', [ReportController::class, 'dealer_commission'])->name('dealer-commission-report');
+    Route::post('dealer-commission-report-excel', [ReportController::class, 'dealer_commission_report_excel'])->name('dealer-commission-report-excel');
     
 });

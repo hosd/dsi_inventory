@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Dealers;
+use Illuminate\Support\Facades\Http;
     
 class ReportController extends Controller
 { 
@@ -340,4 +342,91 @@ class ReportController extends Controller
         }
         
     }
+
+    public function dealer_commission(Request $request)
+    {
+        $dealers = Dealers::select('dealers.*')->get();
+
+        if ($request->ajax()) {
+            $dealer_id = 1;
+            if($request->ordered_from)
+            { 
+                $ordered_from = date("Y-m-d 00:00:00", strtotime($request->ordered_from)); 
+            } else {
+                $ordered_from = '';
+            }
+            if($request->ordered_to){ 
+                $ordered_to = date("Y-m-d 23:59:59", strtotime($request->ordered_to));
+            } else {
+                $ordered_to = '';
+            }
+            
+            $resultdata = array();
+            if($dealer_id){
+                $token = $this->generatedToken();
+                $apidata = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $token,
+                        ])->post('https://projects80.tekgeeks.net/dsi_web/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+    
+                $resultdata = $apidata->json();
+            }
+            
+            if (empty($resultdata['orderList'])) {
+                return Datatables::of([])
+                        ->addColumn('error', function () {
+                            return 'No data available.';
+                        })
+                        ->rawColumns(['error'])
+                        ->make(true);
+            } else {
+                return Datatables::of($resultdata['orderList'])
+                        ->addIndexColumn()
+                        ->addColumn('order_ref_no', function ($row) {
+                            return $row['orderRef'];
+                        })
+                        ->addColumn('name', function ($row) {
+                            return $row['name'];
+                        })
+                        ->addColumn('orderdate', function ($row) {
+                            return $row['orderdate'];
+                        })
+                        ->addColumn('label_name', function ($row) {
+                            return $row['label_name'];
+                        })
+                        ->addColumn('productcode', function ($row) {
+                            return $row['productcode'];
+                        })
+                        ->addColumn('dealer_charge', function ($row) {
+                            return $row['quantity'] * $row['dealer_charge'];
+                        })
+                        ->addColumn('quantity', function ($row) {
+                            return $row['quantity'];
+                        })
+                        // ->rawColumns(['order_ref_no','name'])
+                        ->make(true);
+            }
+        }
+        return view('adminpanel.report.dealer_commission')->with(['dealers' => $dealers]);
+    }
+
+    private function generatedToken() {
+
+        $username = 'admin@tekgeeks.net';
+        $password = 'admin123';
+
+        $response = Http::post('https://projects80.tekgeeks.net/dsi_web/api/create-access-token?email=' . $username . '&password=' . $password);
+        $result = $response->json();
+        //dd($result);
+        if ($response->successful()) {
+            //dd($result);
+            $token = $result['token'];
+            return $token;
+        } else {
+            $error = $response->json(); // Assuming the error response is in JSON format
+            // Handle the error or log it        
+            \LogActivity::addToAPILog('get API token Fail :' . $result['Message']);
+            echo "product details API Failed" . '<br>' . 'Error :' . $result['Message'];
+        }
+    }
+
 }
