@@ -85,7 +85,7 @@
                                          <form name="search-form" id="search-form" method="get" >
                                         <fieldset>
                                             <div class="row ">
-                                            <section class="col col-3">
+                                            <section class="col col-4">
                                                 <label class="label">Dealer</label>
                                                 <select class="select2" id="dealer_id" name="dealer_id" required>
                                                     <option value="">Select</option>
@@ -94,13 +94,13 @@
                                                     @endforeach
                                                 </select> <i></i>
                                             </section>
-                                            <section class="col col-3">
+                                            <section class="col col-4">
                                                 <label class="label">Ordered Date From</label>
                                                 <label class="input inp-holder">
                                                     <input type="date" id="ordered_from" name="ordered_from" >
                                                 </label>
                                             </section>
-                                            <section class="col col-3">
+                                            <section class="col col-4">
                                                 <label class="label">Ordered Date To</label>
                                                <label class="input inp-holder">
                                                    <input type="date" id="ordered_to" name="ordered_to" >
@@ -109,7 +109,7 @@
                                             </section>
                                         </div>
                                         </fieldset>
-                                         <footer style=" padding-right: 0px">
+                                         <footer class="col col-10" style="padding-right: 0px">
                                              <button id="button1id" name="button1id" type="submit" onclick="return check_order_dates()"  class="btn btn-primary">
                                                  Search
                                              </button>
@@ -119,8 +119,7 @@
 
                                          </footer>
                                     </form>
-                                <section class="col col-2" style=" padding-left: 0px">
-                                     <footer style=" padding-left: 0px">
+                                     <footer class="col col-2" style="padding-left: 0px">
                                          <form method="POST" id="excel_form" name="excel_form" action="{{ route('dealer-commission-report-excel') }}">
                                              @csrf
                                              <input type="hidden" name="ex_dealer_id" id="ex_dealer_id" />

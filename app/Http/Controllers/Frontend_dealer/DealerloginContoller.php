@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DealerCommission;
 
 class DealerloginContoller extends Controller {
 
@@ -803,6 +805,80 @@ class DealerloginContoller extends Controller {
             \LogActivity::addToAPILog('get API token Fail :' . $result['Message']);
             echo "product details API Failed" . '<br>' . 'Error :' . $result['Message'];
         }
+    }
+
+    public function commission_report(Request $request)
+    {
+        if ($request->ajax()) {
+            $dealer_id = auth()->user()->dealerID;
+            if($request->ordered_from)
+            { 
+                $ordered_from = date("Y-m-d 00:00:00", strtotime($request->ordered_from)); 
+            } else {
+                $ordered_from = '';
+            }
+            if($request->ordered_to){ 
+                $ordered_to = date("Y-m-d 23:59:59", strtotime($request->ordered_to));
+            } else {
+                $ordered_to = '';
+            }
+            
+            $resultdata = array();
+            if($dealer_id){
+                $token = $this->generatedToken();
+                $apidata = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $token,
+                        ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+    
+                $resultdata = $apidata->json();
+            }
+            
+            if (empty($resultdata['orderList'])) {
+                return Datatables::of([])
+                        ->addColumn('error', function () {
+                            return 'No data available.';
+                        })
+                        ->rawColumns(['error'])
+                        ->make(true);
+            } else {
+                return Datatables::of($resultdata['orderList'])
+                        ->addIndexColumn()
+                        ->addColumn('order_ref_no', function ($row) {
+                            return $row['orderRef'];
+                        })
+                        ->addColumn('name', function ($row) {
+                            return $row['name'];
+                        })
+                        ->addColumn('orderdate', function ($row) {
+                            return $row['orderdate'];
+                        })
+                        ->addColumn('label_name', function ($row) {
+                            return $row['label_name'];
+                        })
+                        ->addColumn('productcode', function ($row) {
+                            return $row['productcode'];
+                        })
+                        ->addColumn('dealer_charge', function ($row) {
+                            return $row['quantity'] * $row['dealer_charge'];
+                        })
+                        ->addColumn('quantity', function ($row) {
+                            return $row['quantity'];
+                        })
+                        // ->rawColumns(['order_ref_no','name'])
+                        ->make(true);
+            }
+        }
+        return view('frontend_dealer.commission_report');
+    }
+
+    public function commission_report_excel(Request $request)
+    {   
+        $dealer_id = $request->ex_dealer_id;
+        $ordered_from = $request->ex_ordered_from;
+        $ordered_to = $request->ex_ordered_to;
+        $current_date = date('Y_m_d_H_i');
+        $filename = 'Report';
+        return Excel::download(new DealerCommission($dealer_id, $ordered_from, $ordered_to), "$filename _ $current_date.xlsx");
     }
 
 }

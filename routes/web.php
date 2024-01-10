@@ -101,6 +101,9 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
     
     Route::get('/view-order-details/{id}', [DealerloginContoller::class, 'view_order_details'])->name('view-order-details');
     Route::post('/update-order-status', [DealerloginContoller::class, 'updateOrderStatus'] )->name('update-order-status');
+
+    Route::get('dealer/commission-report', [DealerloginContoller::class, 'commission_report'] )->name('commission-report');
+    Route::post('dealer/commission-report-excel', [DealerloginContoller::class, 'commission_report_excel'])->name('commission-report-excel');
 });
 
 Route::group(['middleware' => ['auth:web']], function () {

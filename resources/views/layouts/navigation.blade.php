@@ -5,8 +5,8 @@
         <div id="logo-group">
 
             <!-- PLACE YOUR LOGO HERE -->
-            <h1 class="hidden-xs" style="font-weight: 900; color: #3b2c46; font-size: 18px; padding-top: 16px; padding-left: 10px;"><img src="{{ asset('public/back/img/dsi.png') }}" alt="Labour Managment System" style="position: relative; ; width: 110px; float: left; padding-right: 12px;"> IMS</h1>
-            <span id="logo" class="visible-xs"> <img src="{{ asset('public/back/img/mobile_labor_logo.svg') }}" alt="Labour Managment System"> </span>
+            <h1 class="hidden-xs" style="font-weight: 900; color: #3b2c46; font-size: 18px; padding-top: 16px; padding-left: 10px;"><img src="{{ asset('public/back/img/dsi.png') }}" alt="DSI Tyres" style="position: relative; ; width: 110px; float: left; padding-right: 12px;"></h1>
+            <span id="logo" class="visible-xs"> <img src="{{ asset('public/back/img/mobile_labor_logo.svg') }}" alt="DSI Tyres"> </span>
             <!-- END LOGO PLACEHOLDER -->
 
             <!-- Note: The activity badge color changes when clicked and resets the number to 0

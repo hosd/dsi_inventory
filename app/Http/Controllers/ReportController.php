@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Dealers;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DealerCommission;
     
 class ReportController extends Controller
 { 
@@ -348,7 +350,7 @@ class ReportController extends Controller
         $dealers = Dealers::select('dealers.*')->get();
 
         if ($request->ajax()) {
-            $dealer_id = 1;
+            $dealer_id = $request->dealer_id;
             if($request->ordered_from)
             { 
                 $ordered_from = date("Y-m-d 00:00:00", strtotime($request->ordered_from)); 
@@ -366,7 +368,7 @@ class ReportController extends Controller
                 $token = $this->generatedToken();
                 $apidata = Http::withHeaders([
                             'Authorization' => 'Bearer ' . $token,
-                        ])->post('https://projects80.tekgeeks.net/dsi_web/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+                        ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
     
                 $resultdata = $apidata->json();
             }
@@ -414,7 +416,7 @@ class ReportController extends Controller
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://projects80.tekgeeks.net/dsi_web/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {
@@ -427,6 +429,16 @@ class ReportController extends Controller
             \LogActivity::addToAPILog('get API token Fail :' . $result['Message']);
             echo "product details API Failed" . '<br>' . 'Error :' . $result['Message'];
         }
+    }
+
+    public function dealer_commission_report_excel(Request $request)
+    {       
+        $dealer_id = $request->ex_dealer_id;
+        $ordered_from = $request->ex_ordered_from;
+        $ordered_to = $request->ex_ordered_to;
+        $current_date = date('Y_m_d_H_i');
+        $filename = 'Report';
+        return Excel::download(new DealerCommission($dealer_id, $ordered_from, $ordered_to), "$filename _ $current_date.xlsx");
     }
 
 }
