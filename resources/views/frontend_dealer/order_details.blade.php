@@ -83,6 +83,8 @@
                 <input type="hidden" id="dealerID" name="dealerID" value="{{auth()->user()->dealerID }}" />
                 <input type="hidden" id="orderid" name="orderid" value="{{$orderinfo['orderID']}}"/>
                 <input type="hidden" id="orderRef" name="orderRef" value="{{$orderinfo['orderRef']}}"/>
+                <input type="hidden" id="name" name="name" value="{{ $customer['name'] }}"/>
+                <input type="hidden" id="email" name="email" value="{{ $customer['email'] }}"/>
              
                  </div>
              </div>

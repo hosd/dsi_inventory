@@ -63,7 +63,31 @@ class DealerloginContoller extends Controller {
             $pendingout = 0;
         }
 
-        return view('frontend_dealer.dashboard')->with('count', $count)->with('pendingout', $pendingout);
+        $monthly_total = 0;
+
+        $resultdata = array();
+        $dealer_id = auth()->user()->dealerID;
+        $ordered_from = Carbon::now()->firstOfMonth()->format('Y-m-d 00:00:00');
+        $ordered_to = Carbon::now()->endOfMonth()->format('Y-m-d 23:59:59');
+
+        if($dealer_id){
+            $token = $this->generatedToken();
+            $apidata = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $token,
+                    ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+
+            $resultdata = $apidata->json();
+        }
+        
+        if (empty($resultdata['orderList'])) {
+            $monthly_total = 0;
+        } else {
+            foreach ($resultdata['orderList'] as $key => $row) {
+                $monthly_total = $monthly_total + ($row['quantity'] * $row['dealer_charge']);
+            }
+        }
+
+        return view('frontend_dealer.dashboard')->with(['count' => $count, 'pendingout' => $pendingout, 'monthly_total' => $monthly_total]);
     }
 
     public function login(Request $request) {
@@ -782,6 +806,26 @@ class DealerloginContoller extends Controller {
                             ->where('productcode', $product['ProductCode'])
                             ->increment('quantity', $product['Quantity']);
             }
+        } else if($status == "completed"){
+            $bcc_email = array(
+                'karshan@tekgeeks.net',
+                'rajitha@tekgeeks.net',
+                // 'maheen@tekgeeks.net',
+                'dsityreshop@dsityre.lk',
+                'marketing@dsityre.lk',
+                'menuka@dsityre.lk',
+                'sales2@dsityre.lk',
+                'marketing1@dsityre.lk',
+                'marketing4@dsityre.lk'
+            );
+            $to_email = $request->email;
+            \Mail::send('frontend_dealer.thanks_mail', 
+                [
+                    'name' => $request->name,
+                ], function ($message) use ($to_email, $bcc_email, $orderRef) {
+                    $message->from('orders@dsityreshop.com', 'DSI Tyres');
+                    $message->to($to_email)->bcc($bcc_email)->subject('Thank You for Your DSI Tyres Purchase! - '.$orderRef);
+                });
         }
 
         return redirect('dealer/pending-orders')->with('success', 'Status updated successfully. Order number :' . $orderRef);

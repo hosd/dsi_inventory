@@ -109,7 +109,7 @@
                                 <a href="">
                                     <div class="db_summary_card">
                                         <h5>Monthly Invoice Total</h5>
-                                        <h1 class="text-end mb-0">LKR 0.00</h1>
+                                        <h1 class="text-end mb-0">LKR {{ number_format($monthly_total, 2) }}</h1>
                                     </div>
                                 </a>
                                 <br class="d-lg-none d-block">
