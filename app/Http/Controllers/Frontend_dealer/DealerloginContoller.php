@@ -807,9 +807,24 @@ class DealerloginContoller extends Controller {
                             ->increment('quantity', $product['Quantity']);
             }
         } else if($status == "completed"){
+            $token = $this->generatedToken();
+
+            $apidata = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $token,
+                    ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
+            $resultdata = $apidata->json();
+            // dd($resultdata);
+            $order = $resultdata['orderdetails'];
+            $orderitem = $resultdata['ProductList'];
+            $user = $resultdata['Customer'];
+            $dealer = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
+                    ->select('dealers.*','address.vAddressline1','address.vAddressline2')
+                    ->where('dealers.id',$order['dealerID'])
+                    ->first();
+            $cc_email = $dealer->email;
             $bcc_email = array(
                 'karshan@tekgeeks.net',
-                'rajitha@tekgeeks.net',
+                // 'rajitha@tekgeeks.net',
                 // 'maheen@tekgeeks.net',
                 'dsityreshop@dsityre.lk',
                 'marketing@dsityre.lk',
@@ -820,12 +835,15 @@ class DealerloginContoller extends Controller {
             );
             $to_email = $request->email;
             \Mail::send('frontend_dealer.thanks_mail', 
-                [
-                    'name' => $request->name,
-                ], function ($message) use ($to_email, $bcc_email, $orderRef) {
-                    $message->from('orders@dsityreshop.com', 'DSI Tyres');
-                    $message->to($to_email)->bcc($bcc_email)->subject('Thank You for Your DSI Tyres Purchase! - '.$orderRef);
-                });
+            [
+                'order' => $order,
+                'orderitem' => $orderitem, 
+                'user' => $user, 
+                'dealer' => $dealer
+            ], function ($message) use ($to_email, $bcc_email, $cc_email, $orderRef) {
+                $message->from('orders@dsityreshop.com', 'DSI Tyres');
+                $message->to($to_email)->cc($cc_email)->bcc($bcc_email)->subject('Thank You for Your DSI Tyres Purchase! - '.$orderRef);
+            });
         }
 
         return redirect('dealer/pending-orders')->with('success', 'Status updated successfully. Order number :' . $orderRef);
