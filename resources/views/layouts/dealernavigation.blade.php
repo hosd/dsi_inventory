@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="menu_li"><a class="d-flex" href="#"><span><img src="{{ asset('public/dealer/images/document.svg') }}"></span>Invoice management</a></li>
+                        <!-- <li class="menu_li"><a class="d-flex" href="#"><span><img src="{{ asset('public/dealer/images/document.svg') }}"></span>Invoice management</a></li> -->
                         <li class="<?php if( ($name == 'dealer-stock-list')){ ?> active <?php }?> menu_li"><a class="d-flex" href="{{route('dealer/dealer-stock-list')}}"><span><img src="{{ asset('public/dealer/images/stickies.svg') }}"></span>Stock management</a></li>
                         <li class="<?php if( ($name == 'dealer-user-profile')){ ?> active <?php }?> menu_li"><a class="d-flex" href="{{route('dealer/dealer-user-profile')}}"><span><img src="{{ asset('public/dealer/images/Vector.svg') }}"></span>Profile management</a></li>
                         <li class="<?php if( ($name == 'user-list')){ ?> active <?php }?> menu_li"><a class="d-flex" href="{{route('dealer/user-list')}}"><span><img src="{{ asset('public/dealer/images/list.svg') }}"></span>Current User List</a></li>
@@ -72,7 +72,7 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="menu_li"><a href="#"><span><img class="icon_img" src="{{ asset('public/dealer/images/document.svg') }}"></span>Invoice management</a></li>
+                                        <!-- <li class="menu_li"><a href="#"><span><img class="icon_img" src="{{ asset('public/dealer/images/document.svg') }}"></span>Invoice management</a></li> -->
                                         <li class="<?php if( ($name == 'dealer-stock-list')){ ?> active <?php }?> menu_li"><a href="{{route('dealer/dealer-stock-list')}}"><span><img class="icon_img" src="{{ asset('public/dealer/images/stickies.svg') }}"></span>Stock management</a></li>
                                         <li class="<?php if( ($name == 'dealer-user-profile')){ ?> active <?php }?> menu_li"><a href="{{route('dealer/dealer-user-profile')}}"><span><img class="icon_img" src="{{ asset('public/dealer/images/Vector.svg') }}"></span>Profile management</a></li>
                                         <li class="<?php if( ($name == 'user-list')){ ?> active <?php }?>  menu_li"><a href="{{route('dealer/user-list')}}"><span><img class="icon_img" src="{{ asset('public/dealer/images/list.svg') }}"></span>Current User List</a></li>

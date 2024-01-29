@@ -190,7 +190,9 @@
                         },
                         {
                             data: 'role',
-                            name: 'role'
+                            name: 'role',
+                            orderable: false,
+                            searchable: false
                         },
                         
                         {

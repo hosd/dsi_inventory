@@ -225,39 +225,43 @@
                 </li>
                 @endforeach-->
                 @foreach($menuItems as $item)
-                <li class="{{ request()->is($item->url) ? 'active' : '' }}">
-                    <a href="#"><i class="{{ $item->icon }}"></i> <span class="menu-item-parent">@if($lng == "EN"){{ $item->title }}@elseif($lng == "SI"){{ $item->title_sin }}@else{{ $item->title_tam }}
-                            @endif</span></a>
-                    @if(count($subMenuItems)>0)
-                    <ul>
-                        @foreach($subMenuItems as $subMenu)
-						
-                        @if($item->id==$subMenu->parent_id)
+                <li >
 
-                        <?php $url_add =  $subMenu->url;
-                        $url_add = str_replace('-list', '', $url_add);
-
-                        $url_edit = substr_replace($url_add, 'edit-', 0, 0);
-                        $url_action = $url_add."-action";
-                        $url_view = $url_add."-view";
-                        $url_admin = str_replace('.index', '', $subMenu->url);
-                        ?>
-                         <li> 
-                        <li class="{{ request()->is($subMenu->url) || request()->is($url_add) || Request::segment(1) == $url_edit || Request::segment(1) == $url_action || Request::segment(1) == $url_view || Request::segment(1) == $url_admin || Request::segment(1) == $url_add ? 'active' : '' }}">
-                            @if(in_array( $subMenu->id,$permissionHave))
-                            <a href="{{ route( $subMenu->url ) }}">@if($lng == "EN"){{ $subMenu->title }}@elseif($lng == "SI"){{ $subMenu->title_sin }}@else{{ $subMenu->title_tam }}@endif</a>
+                    @if(in_array( $item->id,$arrParentID))
+                        <a href="#"><i class="{{ $item->icon }}"></i><span class="menu-item-parent">
+                        {{ $item->title }}
+                        </span></a>
+                        @if(count($subMenuItems)>0)
+                        <ul>
+                            @foreach($subMenuItems as $subMenu)
+                            @if($item->id==$subMenu->parent_id)
+                            <li <?php if($subMenu->page_id == Session::get('page_id')){ echo "class=active"; } ?>>
+                                @if(in_array( $subMenu->id,$permissionHave))
+                                <a href="{{ route( $subMenu->url ) }}">
+                                    {{ $subMenu->title }}
+                                </a>
+                                @endif
+                            </li>
                             @endif
-                        </li>
+                            @endforeach
+                        </ul>
                         @endif
-                        @endforeach
-                    </ul>
 
-                     @endif
+                    @elseif($item->is_parent == 0)
+                        @if(in_array( $item->id,$permissionHave))
+                            <a href="{{ route( $item->url ) }}"><i class="{{ $item->icon }}"></i><span class="menu-item-parent">
+                                {{ $item->title }}
+                            </span></a>
+                        @endif
+                    @elseif($item->is_parent == 1 && $item->url !="#" )
+                        @if(in_array( $item->id,$permissionHave))
+                            <a href="{{ route( $item->url ) }}"><i class="{{ $item->icon }}"></i><span class="menu-item-parent">
+                            {{ $item->title }}
+                            </span></a>
+                        @endif
+                    @endif
                 </li>
                 @endforeach
-                
-     
-
             </ul>
         </nav>
 

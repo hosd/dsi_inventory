@@ -105,10 +105,15 @@ class CompletedOrderController extends Controller
                     ->select('dealers.*','cities.city_name_en as city','provinces.province_name_en as province','districts.district_name_en as state')
                     ->where('dealers.id',$row['dealerID'])
                     ->get();
-                                return $dealerinfo[0]->name.'-'.$dealerinfo[0]->city.' ('.$dealerinfo[0]->phone.')';
+
+                    if (isset($dealerinfo[0])) {
+                        return $dealerinfo[0]->name . '-' . $dealerinfo[0]->city . ' (' . $dealerinfo[0]->phone . ')';
+                    } else {
+                        return 'Dealer information not available';
+                    }
                             })
                             ->addColumn('edit', function ($row) {
-                                $edit_url = route('completed-order-details', encrypt($row['orderID']));
+                                $edit_url = route('completed-order-details', $row['orderRef']);
                                 $btn = '<a   href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
                                 return $btn;
                             })
@@ -211,13 +216,11 @@ class CompletedOrderController extends Controller
     
     public function edit($id)
     {
-        
-       $ID = decrypt($id);
         $token = $this->generatedToken();
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $ID);
+                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];

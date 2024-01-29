@@ -177,12 +177,16 @@
                         {
                             data: 'province_name_en',
                             name: 'province_name_en',
-                            "className": "text-center"
+                            "className": "text-center",
+                            orderable: false,
+                            searchable: false
                         },
                         {
                             data: 'district_name_en',
                             name: 'district_name_en',
-                            "className": "text-center"
+                            "className": "text-center",
+                            orderable: false,
+                            searchable: false
                         },
                         
                         
@@ -190,7 +194,9 @@
                         {
                             data: 'status',
                             name: 'status',
-                            "className": "text-center"
+                            "className": "text-center",
+                            orderable: false,
+                            searchable: false
                         },
                         
                         {
