@@ -41,13 +41,17 @@
             </div>
             <div>
              
+            @if ($errors->any())
+              <span class="invalid-feedback" role="alert">
+                  <ul>
+                      @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+              </span>
+            @endif
               <form method="POST" action="{{ route('dealer-login') }}" id="login-form" name="login_form" class="smart-form client-form mt-4">
-                            @csrf
-                            @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror   
+                            @csrf 
                 <div class="mb-2">
                   <label for="InputEmail" class="form-label">Email address <span style="color: red;">*</span></label>
                   <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" required>
@@ -57,7 +61,7 @@
                   <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <div class="text-end mb-2">
-                  <a href="{{ route('forgot-dealer-password') }}">Forgot Password?</a>
+                  <!-- <a href="{{ route('forgot-dealer-password') }}">Forgot Password?</a> -->
                 </div>
                 {!! htmlFormSnippet() !!}
       <br/>

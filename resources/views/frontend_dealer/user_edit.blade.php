@@ -81,7 +81,7 @@
                             
                                 <div class="mb-2 inp-holder">
                                     <label for="InputPhone" class="form-label">Mobile Number <span class="required" style="color: red;">*</span></label>
-                                    <input type="tel" id="phone" name="phone" class="form-control" value="{{$Userinfo[0]->mobile_no}}">
+                                    <input type="tel" id="phone" name="phone" class="form-control" value="{{$Userinfo[0]->mobile_no}}" maxlength="10" minlength="10">
                                 </div>
                                 
                               

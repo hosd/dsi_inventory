@@ -236,6 +236,10 @@ class DealersContoller extends Controller
 
             \LogActivity::addToLog('dealers record '.$data->name.' deactivated('.$idD.')');
 
+            User::where("dealerID", $idD)->update(["status" => "N"]);
+
+            \LogActivity::addToLog('dealer '.$data->name.' user records deactivated');
+
             return redirect()->route('dealers-list')
             ->with('success', 'Record deactivate successfully.');
 

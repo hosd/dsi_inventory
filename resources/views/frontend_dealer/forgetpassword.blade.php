@@ -33,14 +33,23 @@
         <div class="col-lg-5 col-12">
           <div class="login_left">
             <div class="mob_login_title d-md-none d-block">
-              <div class="mobile_logo pb-2"><img src="{{ asset('public/back/img/logo_colored.png') }}"></div> 
+              <div class="mobile_logo pb-2"><img src="{{ asset('public/dealer/images/logo_colored.png') }}"></div> 
               <h1 class="pb-3">DEALER INVENTORY MANAGEMENT SYSTEM</h1>
             </div>
             <div class="heading_left">
             <h1>Forgot Password?</h1>
             </div>
             <div>
-            <form method="POST" action="{{ route('forgot-dealer-password') }}" id="login_form" name="login_form" class="smart-form client-form mt-4">
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                  <ul>
+                      @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+              </div>
+            @endif
+            <form method="POST" action="{{ route('reset-dealer-password') }}" id="login_form" name="login_form" class="smart-form client-form mt-4">
                 @csrf
                 <div class="mb-2">
                   <label for="InputEmail" class="form-label">Email address <span style="color: red;">*</span></label>
@@ -48,7 +57,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100 login_btn">SEND RESET LINK</button>
                 <div class="return_login mt-3">
-                  <p>Return to <a href="#">Login</a></p>
+                  <p>Return to <a href="{{ route('dealer-login') }}">Login</a></p>
                 </div>            
               </form>
             </div>

@@ -364,14 +364,12 @@ class ReportController extends Controller
             }
             
             $resultdata = array();
-            if($dealer_id){
-                $token = $this->generatedToken();
-                $apidata = Http::withHeaders([
-                            'Authorization' => 'Bearer ' . $token,
-                        ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
-    
-                $resultdata = $apidata->json();
-            }
+            $token = $this->generatedToken();
+            $apidata = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $token,
+                    ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+
+            $resultdata = $apidata->json();
             
             if (empty($resultdata['orderList'])) {
                 return Datatables::of([])
@@ -403,6 +401,10 @@ class ReportController extends Controller
                         })
                         ->addColumn('quantity', function ($row) {
                             return $row['quantity'];
+                        })
+                        ->addColumn('dealer', function ($row) {
+                            $dealer1 = Dealers::find($row['dealerID']);
+                            return $dealer1->name.' - '.$dealer1->dealercode;
                         })
                         // ->rawColumns(['order_ref_no','name'])
                         ->make(true);

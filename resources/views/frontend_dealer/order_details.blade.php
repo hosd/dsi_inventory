@@ -147,7 +147,7 @@
                                     @foreach($productlist as $row)
                                     <tr>
                                       <th scope="row">{{$row['LineNumber']}}</th>
-                                      <td>{{$row['ProductCode']}}</td>
+                                      <td>{{$row['LabelName']}} - {{$row['ProductCode']}}</td>
                                       <td>{{ $row['Quantity'] }}</td>
                                       <td>{{number_format($row['UnitPrice'], 2, '.', '')}}</td>
                                       <td>{{round($row['discount'])}}</td>

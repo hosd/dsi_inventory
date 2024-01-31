@@ -108,7 +108,7 @@
                             <div class="col-lg-6 col-12">
                                 <a href="">
                                     <div class="db_summary_card">
-                                        <h5>Monthly Invoice Total</h5>
+                                        <h5>Monthly Dealer Income</h5>
                                         <h1 class="text-end mb-0">LKR {{ number_format($monthly_total, 2) }}</h1>
                                     </div>
                                 </a>

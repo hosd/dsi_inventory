@@ -53,9 +53,9 @@ Route::post('/dealer-login', [DealerloginContoller::class, 'login'])
 Route::get('/forgot-dealer-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
     ->middleware('guest')
     ->name('forgot-dealer-password');
-Route::post('/forgot-dealer-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+Route::post('/reset-dealer-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
     ->middleware('guest')
-    ->name('forgot-dealer-password');
+    ->name('reset-dealer-password');
 
 Route::get('/dealer-password-reset', [ForgotPasswordController::class, 'resetDealerPassword'])
     ->middleware('guest')

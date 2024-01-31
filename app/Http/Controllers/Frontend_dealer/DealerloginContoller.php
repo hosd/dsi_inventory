@@ -95,44 +95,55 @@ class DealerloginContoller extends Controller {
         $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
-            'g-recaptcha-response' => 'recaptcha',
+            'g-recaptcha-response' => 'required|recaptcha',
+        ], [
+            'g-recaptcha-response.recaptcha' => 'Captcha validation failed. Please try again.',
         ]);
+    
         $credentials = [
             'email' => $request->email,
-            'password' => $request->password];
-
-        if (Auth::guard('dealer')->attempt($credentials)) { // Using the 'customer' guard
+            'password' => $request->password
+        ];
+    
+        if (Auth::guard('dealer')->attempt($credentials)) {
             $user = Auth::guard('dealer')->user();
-            // Check if the user's role is either 2 or 3
-            if ($user->roleID === 2 || $user->roleID === 3) {
-                // $request->session()->regenerate();
-                if ($user) {
-                    // Store user data in the session
-                    $request->session()->put('dealer_data', [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'mobile_no' => $user->mobile_no,
-                        'status' => $user->status,
-                        'dealerID' => $user->dealerID,
-                        'roleID' => $user->roleID,
+    
+            if ($user->status == "Y") {
+                // Check if the user's role is either 2 or 3
+                if ($user->roleID === 2 || $user->roleID === 3) {
+                    if ($user) {
+                        // Store user data in the session
+                        $request->session()->put('dealer_data', [
+                            'id' => $user->id,
+                            'name' => $user->name,
+                            'email' => $user->email,
+                            'mobile_no' => $user->mobile_no,
+                            'status' => $user->status,
+                            'dealerID' => $user->dealerID,
+                            'roleID' => $user->roleID,
                             // Add other attributes you want to store
+                        ]);
+                    }
+                    return redirect()->intended('dealer/dashboard');
+                } else {
+                    // Redirect if role is not 2 or 3
+                    return back()->withErrors([
+                        'email' => 'Unauthorized access.',
                     ]);
                 }
-                return redirect()->intended('dealer/dashboard');
             } else {
-                // Redirect if role is not 2 or 3
-
+                // User's status is not "Y"
+                Auth::guard('dealer')->logout();
                 return back()->withErrors([
-                            'email' => 'Unauthorized access.',
+                    'email' => 'Your account is inactive.',
                 ]);
             }
         }
-
+    
         return back()->withErrors([
-                    'email' => 'The provided credentials do not match our records.',
+            'email' => 'The provided credentials do not match our records.',
         ]);
-    }
+    }    
 
     public function logout(Request $request) {
         Auth::guard('dealer')->logout();
@@ -146,7 +157,7 @@ class DealerloginContoller extends Controller {
 
     public function stock_list(Request $request) {
         $savestatus = 'A';
-        $category = ProductCategory::select('*')->where('status', 'Y')->where('is_delete', 0)->where('id', '!=', '5')->orderBy('name', 'ASC')->get();
+        $category = ProductCategory::where([['status', '=', 'Y'],['is_delete', '=', 0],])->whereNotIn('id', [1, 5])->orderBy('name', 'ASC')->get();
         $product = Productmodel::select('*')->orderBy('name', 'ASC')->get();
         //$count = Productmodel::select('*')->get();
         if ($request->ajax()) {
@@ -219,7 +230,7 @@ class DealerloginContoller extends Controller {
 
     public function reorder_stock_list(Request $request) {
         $savestatus = 'A';
-        $category = ProductCategory::select('*')->where('status', 'Y')->where('is_delete', 0)->where('id', '!=', '5')->orderBy('name', 'ASC')->get();
+        $category = ProductCategory::where([['status', '=', 'Y'],['is_delete', '=', 0],])->whereNotIn('id', [1, 5])->orderBy('name', 'ASC')->get();
         $product = Productmodel::select('*')->orderBy('name', 'ASC')->get();
 
         if ($request->ajax()) {
@@ -298,6 +309,7 @@ class DealerloginContoller extends Controller {
         $products['data'] = Productmodel::select('*')
                 ->where("product_category", $catID)
                 ->where('status', 1)
+                ->where('product_subcategory', '!=', 12)
                 ->whereNotIn('productcode', function ($query)use ($dealerID) {
                     $query->select('productcode')
                     ->from('dealer_stock')
@@ -925,6 +937,10 @@ class DealerloginContoller extends Controller {
                         })
                         ->addColumn('quantity', function ($row) {
                             return $row['quantity'];
+                        })
+                        ->addColumn('dealer', function ($row) {
+                            $dealer1 = Dealers::find($row['dealerID']);
+                            return $dealer1->name.' - '.$dealer1->dealercode;
                         })
                         // ->rawColumns(['order_ref_no','name'])
                         ->make(true);

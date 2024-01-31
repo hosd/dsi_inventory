@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginRequest extends FormRequest
 {
@@ -46,7 +48,14 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         // if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            if (! Auth::attempt(array_merge( $this->only('email', 'password'), ['status' => 'Y' ]), $this->filled('remember'))) {
+        // if (! Auth::attempt(array_merge( $this->only('email', 'password'), ['status' => 'Y' ]), $this->filled('remember'))) {
+
+        $inputCredentials = $this->only('email', 'password');
+        $credentials = array_merge($inputCredentials, ['status' => 'Y']);
+    
+        $user = User::where('email', $inputCredentials['email'])->where('status', 'Y')->first();
+    
+        if (!$user || !Hash::check($inputCredentials['password'], $user->password) || $user->dealerID != null || !Auth::attempt($credentials, $this->filled('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

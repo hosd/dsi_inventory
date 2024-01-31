@@ -80,7 +80,7 @@
                                                     </div>
                                                    <div class="mb-3 inp-holder">
                                                         <label for="InputContact" class="form-label">Mobile Number <span style="color: red;">*</span></label>
-                                                        <input type="tel" id="phone" name="phone" class="form-control" >
+                                                        <input type="tel" id="phone" name="phone" class="form-control" maxlength="10" minlength="10">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-12">

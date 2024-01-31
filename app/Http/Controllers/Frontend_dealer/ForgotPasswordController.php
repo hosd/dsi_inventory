@@ -26,44 +26,52 @@ class ForgotPasswordController extends Controller
         return view('frontend_dealer.resetpassword', ['request' => $request]);
         //return view('auth.reset-password', ['request' => $request]);
     }
+
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(['email' => 'required|email']);
-        $resetUrl = "#";
+
         $email = $request->email;
-        $user = User::where('email', $email)->first();
-        
+        $user = User::where('email', $email)->whereNotNull('dealerID')->first();
+
+        // dd($user);
         if (!$user) {
-            return back()->withInput()->withErrors(['email' => 'We could not find a user with that email address.']);
+            return back()->withErrors(['email' => 'We could not find a user with that email address.']);
         }
-
         $token = Str::random(60);
-        DB::table('password_resets')->insert([
-            'email' => $email,
-            'token' => $token,
-            'created_at' => now()
-        ]);
+        
+        try {
+            DB::table('password_resets')->insert([
+                'email' => $email,
+                'token' => $token,
+                'created_at' => now()
+            ]);
 
-        $response = Password::sendResetLink($request->only('email'));
+            // if ($response === Password::RESET_LINK_SENT) {
+            //     Mail::send('mail.dealer_password_reset_mail', [
+            //         'resetLink' => $this->generatePasswordResetLink($request->email, $response),
+            //     ], function ($message) use ($request) {
+            //         $message->to($request->email)->subject('Your Password Reset Link');
+            //     });
+            //     return back()->with('status', __($response));
+            // }
 
-    // if ($response === Password::RESET_LINK_SENT) {
-    //     Mail::send('mail.dealer_password_reset_mail', [
-    //         'resetLink' => $this->generatePasswordResetLink($request->email, $response),
-    //     ], function ($message) use ($request) {
-    //         $message->to($request->email)->subject('Your Password Reset Link');
-    //     });
-    //     return back()->with('status', __($response));
-    // }
+            //return back()->withErrors(['email' => __($response)]);
 
-    //return back()->withErrors(['email' => __($response)]);
- 
-        Mail::send('mail.dealer_password_reset_mail', ['token' => $token, 'resetUrl' =>  $this->generatePasswordResetLink($request->email, $token) ], function($message) use ($email) {
-            $message->to($email);
-            $message->subject('Reset Password Notification');
-        });
+            Mail::send('mail.dealer_password_reset_mail', ['token' => $token, 'resetUrl' =>  $this->generatePasswordResetLink($request->email, $token) ], function($message) use ($email) {
+                $message->to($email);
+                $message->subject('Reset Password Notification');
+            });
 
-        return back()->with(['status' => 'We have emailed your password reset link!']);
+            return back()->with(['status' => 'We have emailed your password reset link!']);
+        } catch (\Exception $e) {
+            // Log the error for debugging purposes
+            \LogActivity::addToLog('Email failed to send : '.$e);
+
+            return back()->withErrors(['email' => 'Something went wrong. Please try again later.']);
+        }
     }
+
     private function generatePasswordResetLink(string $email, string $token): string
     {
         return \URL::temporarySignedRoute(

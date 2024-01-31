@@ -66,7 +66,7 @@
                            
                                 <div class="mb-3 inp-holder">
                                      <label for="InputName" class="form-label">Name</label>
-                                     <input type="text" id="name" name="name" class="form-control" value="{{auth()->user()->name}}"  >
+                                     <input type="text" id="name" name="name" class="form-control" value="{{auth()->user()->name}}" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="InputEmail" class="form-label">Email</label>

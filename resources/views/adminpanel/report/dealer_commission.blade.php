@@ -158,13 +158,14 @@
                                         <thead>
                                             <tr>
                                                 <th width="50px">No</th>
+                                                <th>Dealer</th>
                                                 <th>Order Ref No</th>
                                                 <th>Customer Name</th>
                                                 <th>Ordered Date</th>
                                                 <th>Product Name</th>
                                                 <th>Product Code</th>
                                                 <th>Quantity</th>
-                                                <th>Dealer Charge</th>
+                                                <th>Dealer Income</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -263,6 +264,10 @@
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'id'
+                        },
+                        {
+                            data: 'dealer',
+                            name: 'dealer'
                         },
                         {
                             data: 'order_ref_no',

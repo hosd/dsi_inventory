@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Models\Dealers;
 
 class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping {
     
@@ -44,27 +45,28 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         }
 
         $resultdata = array();
-        if($this->dealer_id){
-            $token = $this->generatedToken();
-            $apidata = Http::withHeaders([
-                        'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $this->dealer_id . '&ordered_from=' . $this->ordered_from. '&ordered_to=' . $this->ordered_to);
+        $token = $this->generatedToken();
+        $apidata = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $this->dealer_id . '&ordered_from=' . $this->ordered_from. '&ordered_to=' . $this->ordered_to);
 
-            $resultdata = $apidata->json();
-        }
+        $resultdata = $apidata->json();
         $resultdata = collect($resultdata);
         // dd($resultdata);
         return $resultdata;
     }
 
     public function headings(): array {
-        return ['Order Ref Number',
+        return [
+            'Dealer',
+            'Order Ref Number',
             'Customer Name',
             'Order Date',
             'Product Name',
             'Product Code',
             'Quantity',
-            'Dealer Charge'];
+            'Dealer Income'
+        ];
     }
 
     public function map($query): array {
@@ -72,7 +74,9 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         $dealerChargeTotal = 0;
     
         foreach ($query as $data) {
+            $dealer1 = Dealers::find($data['dealerID']);
             $mappedData[] = [
+                $dealer1->name.' - '.$dealer1->dealercode,
                 $data['orderRef'] ?? null,
                 $data['name'] ?? null,
                 $data['orderdate'] ?? null,
@@ -86,16 +90,17 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         }
     
         // Add an empty row between data rows
-        $mappedData[] = ['', '', '', '', '', '', ''];
+        $mappedData[] = ['', '', '', '', '', '', '', ''];
 
-        // Add a row for the dealer charge total
-        $mappedData[] = [ // You can adjust this based on your needs
-            null, // You can adjust other columns based on your needs
+        // Add a row for the Dealer Income total
+        $mappedData[] = [
             null,
             null,
             null,
             null,
-            'Total Dealer Charge',
+            null,
+            null,
+            'Total Dealer Income',
             $dealerChargeTotal
         ];
     
