@@ -51,16 +51,6 @@
                         
                         <h1 style="font-weight: 900; color: #ffffff; font-size: 27px; text-align: center;">Inventory Management System</h1>
 
-                        <!-- <div class="mx-auto logo_col no_padding">
-                            <div class="logo_col">
-                                <img src="https://cms.tekgeeks.net/public/back/img/logo1.png" alt="" class="logo">
-                                <p class="logo_text_e">Department Labour</p>
-                                <p class="logo_text_s">කම්කරු දෙපාර්තමේන්තුව</p>
-                                <p class="logo_text_t">தொழில் திணைக்களம்</p>
-                            </div>
-                            <img src="https://cms.tekgeeks.net/public/back/img/l_logo1.png" alt="" class="l_logo">
-                        </div> -->
-
                         <form method="POST" action="{{ route('login') }}" id="login_form" name="login_form" class="smart-form client-form">
                             @csrf
                             <header style="background-color: trnsparent; border:none; padding-bottom: 0px;">

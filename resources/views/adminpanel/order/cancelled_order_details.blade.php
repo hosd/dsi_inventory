@@ -18,17 +18,6 @@
                         </a>
                     </div>
                 </div>
-                <!-- <div class="col-lg-8">
-                    <ul id="sparks" class="">
-                        <ul id="sparks" class="">
-                            <li class="sparks-info" style="border: 1px solid #c5c5c5; padding-right: 0px; padding: 10px; min-width: auto;">
-                                <a href="{{ route('order-list') }}">
-                                    <h5>{{ __('order.view_all') }}<span class="txt-color-blue" style="text-align: center"><i class=""></i></span></h5>
-                                </a>
-                            </li>
-                        </ul>
-                    </ul>
-                </div> -->
             </div>
             @if ($errors->any())
             <div class="alert alert-danger">

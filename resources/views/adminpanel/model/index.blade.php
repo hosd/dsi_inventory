@@ -35,26 +35,6 @@ $makeID = $info[0]->makeID;
                         </a>
                     </div>
                 </div>
-                <!-- <div class="col-lg-8">
-                    <ul id="sparks" class="">
-                        <ul id="sparks" class="">
-                            @can('role-create')
-                            <li class="sparks-info sparks-info_active" style="border: 1px solid #c5c5c5; padding-right: 0px; padding: 22px 15px; min-width: auto;">
-                                <a href="{{ route('login') }}">
-                                    <h5>{{ __('complainmodel.add_new') }}</h5>
-                                </a>
-                            </li>
-                            @endcan
-                            @can('role-list')
-                            <li class="sparks-info" style="border: 1px solid #c5c5c5; padding-right: 0px; padding: 10px; min-width: auto;">
-                                <a href="{{ route('login') }}">
-                                    <h5>{{ __('complainmodel.view_all') }}<span class="txt-color-blue" style="text-align: center"><i class=""></i></span></h5>
-                                </a>
-                            </li>
-                            @endcan
-                        </ul>
-                    </ul>
-                </div> -->
             </div>
             @if ($errors->any())
             <div class="alert alert-danger">

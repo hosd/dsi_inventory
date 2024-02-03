@@ -10,7 +10,6 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use DataTables;
-use App\Models\LabourOfficeDivision;
 use App\Models\SmsTemplate;
 use App\Library\MobitelSms;
 
@@ -124,47 +123,6 @@ class UserController extends Controller
 
         $input['password'] = Hash::make($input['password']);
         $input['roleID'] =$role[0]->id;
-
-//        if($request->mobile_no != ''){
-//            $password = $request->confirmpassword;
-//
-//            $smsitem = SmsTemplate::where('status', 'Y')
-//                ->where('is_delete', 0)
-//                ->where('id', 6)
-//                ->first();
-//
-//                if($request->lang == "SI")
-//                {
-//                    $variables = ['[USER]','[EMAIL]','[PASSWORD]'];
-//
-//                    $variableData = [$request->name_si,$request->email,$request->password];
-//
-//                    $sms_body = str_ireplace($variables, $variableData, $smsitem->body_content_sin);
-//                }
-//                else if($request->lang == "TA")
-//                {
-//                    $variables = ['[USER]','[EMAIL]','[PASSWORD]'];
-//
-//                    $variableData = [$request->name_ta,$request->email,$request->password];
-//
-//                    $sms_body = str_ireplace($variables, $variableData, $smsitem->body_content_tam);
-//                }
-//                else
-//                {
-//                    $variables = ['[USER]','[EMAIL]','[PASSWORD]'];
-//
-//                    $variableData = [$request->name,$request->email,$request->password];
-//
-//                    $sms_body = str_ireplace($variables, $variableData, $smsitem->body_content_en);
-//                }
-//
-//                $mobitelSms = new MobitelSms();
-//                $session = $mobitelSms->createSession('','esmsusr_uqt','2L@boUr$m$','');
-//                $mobitelSms->sendMessagesMultiLang($session,'Labour Dept',$sms_body,array($request->mobile_no),0);
-//                $mobitelSms->closeSession($session);
-//
-//                \SmsLog::addToLog($request->name, $request->mobile_no, $sms_body);
-//        }
 
         $user = User::create($input);
         $user->assignRole($request->input('roles'));

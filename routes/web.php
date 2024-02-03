@@ -5,7 +5,6 @@ use GuzzleHttp\Middleware;
 //use App\Models\EstablishmentType;
 //use App\Models\RegisterCoomplaint;
 use Illuminate\Support\Facades\App;
-//use App\Models\LabourOfficeDivision;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;

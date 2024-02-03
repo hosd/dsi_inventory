@@ -156,8 +156,8 @@
                                 <div class="row">
                                     <section class="col-lg-12" style="margin-top: 2%; margin-left:16px;">
                                         <label class="label">{{ __('user.change_password') }}
-                                        <button id="changepwyes" type="button" style="margin-left: 2%; width: 90px; background-color: #963c2c; color: #e7e7e7;" class="btn btn-default"> {{ __('action.yes') }} </button>
-                                        <button id="changepwno" type="button" style="margin-left: 2%; width: 90px; background-color: #963c2c; color: #e7e7e7;" class="btn btn-default"> {{ __('action.no') }} </button></label>
+                                        <button id="changepwyes" type="button" style="margin-left: 2%; width: 90px; background-color: #963c2c; color: #e7e7e7;" class="btn btn-default"> {{ __('Yes') }} </button>
+                                        <button id="changepwno" type="button" style="margin-left: 2%; width: 90px; background-color: #963c2c; color: #e7e7e7;" class="btn btn-default"> {{ __('No') }} </button></label>
                                     </section>
                                 </div>
                                 <div class="row" id="changepassword" style="display: none;">

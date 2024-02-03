@@ -73,24 +73,6 @@
                         </a>
                     </div>
                 </div>
-                <!-- <div class="col-lg-8">
-                    <ul id="sparks" class="">
-                        <ul id="sparks" class="">
-                            @can('role-create')
-                            <li class="sparks-info" style="border: 1px solid #c5c5c5; padding-right: 0px; padding: 22px 15px; min-width: auto;">
-                                <a href="{{ route('login') }}">
-                                    <h5>{{ __('complaindesigncode.add_new') }}</h5>
-                                </a>
-                            </li>
-                            @endcan
-                            <li class="sparks-info sparks-info_active" style="border: 1px solid #c5c5c5; padding-right: 0px; padding: 22px 15px; min-width: auto;">
-                                <a href="{{ route('login') }}">
-                                    <h5>{{ __('complaindesigncode.view_all') }}</h5>
-                                </a>
-                            </li>
-                        </ul>
-                    </ul>
-                </div> -->
             </div>
             @if ($message = Session::get('success'))
             <div class="alert alert-success">

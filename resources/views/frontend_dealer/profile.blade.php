@@ -79,7 +79,7 @@
                                 
                                 <div class="mb-3 inp-holder">
                                     <label for="InputPhone" class="form-label">Mobile Number</label>
-                                    <input type="tel" id="phone" name="phone" class="form-control" value="{{auth()->user()->mobile_no}}" >
+                                    <input type="tel" id="phone" name="phone" class="form-control" value="{{auth()->user()->mobile_no}}" maxlength="10" minlength="10">
                                 </div>
                               
                         </div>

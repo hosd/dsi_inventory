@@ -42,13 +42,13 @@
             <div>
              
             @if ($errors->any())
-              <span class="invalid-feedback" role="alert">
+              <div class="alert alert-danger">
                   <ul>
                       @foreach ($errors->all() as $error)
                           <li>{{ $error }}</li>
                       @endforeach
                   </ul>
-              </span>
+              </div>
             @endif
               <form method="POST" action="{{ route('dealer-login') }}" id="login-form" name="login_form" class="smart-form client-form mt-4">
                             @csrf 
