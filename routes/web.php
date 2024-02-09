@@ -32,16 +32,7 @@ Route::get('/admin', function () {
     //return view('welcome');
 });
 
-Route::get('/', function () {
-    return view('userpanel.index');
-    //return view('welcome');
-});
-
-Route::get('/make-complaint', function () {
-   // rename('index.html', 'index15-03-2022.html');
-    return view('userpanel.index');
-    //return view('welcome');
-});
+Route::redirect('/', '/login');
 
 Route::get('/dealer-login', [DealerloginContoller::class, 'showLoginForm'])->name('dealer-login');
 
