@@ -342,7 +342,7 @@ $provinceID = $addressinfo[0]->provinceID;
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                             },
                                     data: {
-                                      	'_token": "{{ csrf_token() }}',
+                                      	'_token': "{{ csrf_token() }}",
                                         'code': function() {
                                             return $( "#dealercode" ).val();
                                         }, 
@@ -541,7 +541,7 @@ $provinceID = $addressinfo[0]->provinceID;
                         $(".existing_city").html('');
 
                         // Read data and create <option >
-                        var dropdown = ' <section class="col col-6"> <label class="label">City <span style=" color: red;">*</span></label><label class="select inp-holder"><div class="existing_city"> <select name="cityID" id="cityID" required=""> <option value="" ></option>';
+                        var dropdown = ' <section class="col col-6"> <label class="label">Town <span style=" color: red;">*</span></label><label class="select inp-holder"><div class="existing_city"> <select name="cityID" id="cityID" required=""> <option value="" ></option>';
                         if (len > 0) {
 
                             for (var i = 0; i < len; i++) {
