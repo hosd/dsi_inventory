@@ -6,26 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Dealers extends Model
+class Bankmodal extends Model
 {
     use HasFactory,Notifiable;
     
-    protected $table = 'dealers';
+    protected $table = 'bank';
 
     protected $fillable = [
         'name',
-        'email',
-        'phone',
-        'addressID',
+        'vlogo',
         'status',
-        'Contact_person',
-        'opening_hours',
         'created_at',
-        'dealercode',
-        'updated_at',
-        'bankID',
-        'vBranchname',
-        'vBranchcode',
-        'vAccountnum'
+        'updated_at'
     ];
 }
