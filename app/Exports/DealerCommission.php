@@ -57,7 +57,7 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
 
         $resultdata = $apidata->json();
         $resultdata = collect($resultdata);
-        // dd($resultdata);
+         dd($resultdata);
         return $resultdata;
     }
 
@@ -94,7 +94,7 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
             ->leftJoin('bank', 'dealers.bankID', '=', 'bank.id')
             ->where('dealers.id',$data['dealerID'])
             ->select('dealers.*','address.vAddressline1','address.vAddressline2','cities.city_name_en as city','provinces.province_name_en as province','districts.district_name_en as state','bank.name as bank')
-            ->get();
+            ->first();
             $mappedData[] = [
                 
                 $data['orderdate'] ?? null,
@@ -122,6 +122,9 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
 
         // Add a row for the Dealer Income total
         $mappedData[] = [
+            null,
+            null,
+            null,
             null,
             null,
             null,
