@@ -28,6 +28,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CompletedOrderController;
 use App\Http\Controllers\CancelledOrderController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\masterdata\BankContoller;
 
 
 use App\Http\Controllers\ProductController;
@@ -195,6 +196,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/edit-designcode/{id}', [DesigncodeContoller::class, 'edit'])->name('edit-designcode');
     Route::get('/status-designcode/{id}', [DesigncodeContoller::class, 'activation'])->name('status-designcode');
     
+     /////////////////////////// bank master //////////////////
+     Route::get('new-bank', [BankContoller::class, 'index'])->name('new-bank');
+     Route::post('new-bank', [BankContoller::class, 'store'])->name('new-bank');
+     Route::get('bank-list', [BankContoller::class, 'datalist'])->name('bank-list');    
+     Route::get('/edit-bank/{id}', [BankContoller::class, 'edit'])->name('edit-bank');
+     Route::get('/status-bank/{id}', [BankContoller::class, 'activation'])->name('status-bank');
   
     /////////////////PRODUCT///////////////////////////////////////
     

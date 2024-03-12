@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Bankmodal;
 
 class DealersContoller extends Controller
 {
@@ -44,7 +45,8 @@ class DealersContoller extends Controller
         $province =Province::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('province_name_en','ASC')->get();
         $District =District::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('district_name_en','ASC')->get();
         $city =City::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('city_name_en','ASC')->get();
-        return view('adminpanel.dealers.index')->with('title',$title)->with('District',$District)->with('savestatus',$savestatus)->with('city',$city)->with('province',$province)->with('count',$count);
+        $bank =Bankmodal::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
+        return view('adminpanel.dealers.index')->with('title',$title)->with('District',$District)->with('savestatus',$savestatus)->with('city',$city)->with('province',$province)->with('count',$count)->with('bank',$bank);
     }
 
      public function datalist(Request $request)
@@ -126,9 +128,10 @@ class DealersContoller extends Controller
                 'districtID' => 'required',
                 'cityID' => 'required',
               	'dealercode' => 'max:30',
-                //'dealercode' => 'max:30|unique:dealers,dealercode',
-                //'vLatitude' => 'required',
-                //'vLongitude' => 'required',
+                'bankID'  => 'required',
+                'vBranchname'  => 'required|max:100',
+                'vBranchcode'  => 'required|max:50',
+                'vAccountnum' => 'required|max:50'
             ]);
         } else {
             $request->validate([
@@ -143,8 +146,10 @@ class DealersContoller extends Controller
                 'districtID' => 'required',
                 'cityID' => 'required',
                 'dealercode' => ['max:30', Rule::unique('dealers')->where(function ($query) use ($request) { return $query->where('id','!=', decrypt($request->id)); })],
-                //'vLatitude' => 'required',
-                //'vLongitude' => 'required',
+                'bankID'  => 'required',
+                'vBranchname'  => 'required|max:100',
+                'vBranchcode'  => 'required|max:50',
+                'vAccountnum' => 'required|max:50'
             ]);
         }
         
@@ -158,6 +163,10 @@ class DealersContoller extends Controller
         $data_arry['vLongitude'] = $request->vLongitude;
         $data_arry['status'] = $request->status;        
         $data_arry['dealercode'] =$request->dealercode;
+        $data_arry['bankID'] =$request->bankID;
+        $data_arry['vBranchname'] =$request->vBranchname;
+        $data_arry['vBranchcode'] =$request->vBranchcode;
+        $data_arry['vAccountnum'] =$request->vAccountnum;
         
         $addresses_arry = array(); 
             // address details
@@ -216,7 +225,8 @@ class DealersContoller extends Controller
         $addressID = $info[0]->addressID; 
         $addressinfo = Address::where('id','=',$addressID)->get();
         $savestatus = 'E';
-        return view('adminpanel.dealers.edit')->with('title',$title)->with('info',$info)->with('savestatus',$savestatus)->with('province',$province)->with('District',$District)->with('city',$city)->with('addressinfo',$addressinfo)->with('count',$count);
+        $bank =Bankmodal::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
+        return view('adminpanel.dealers.edit')->with('title',$title)->with('info',$info)->with('savestatus',$savestatus)->with('province',$province)->with('District',$District)->with('city',$city)->with('addressinfo',$addressinfo)->with('count',$count)->with('bank',$bank);
         //return view('masterdata.complain_category.edit', ['data' => $data]);
         //return view('masterdata.complain_category.edit');
     }

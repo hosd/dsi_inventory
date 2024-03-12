@@ -15,6 +15,10 @@ $vOpeninghours= '';
 $vContactperson = '';
 $vLatitude= '';
 $vLongitude = '';
+$bankID = '';
+$vBranchname = '';
+$vBranchcode = '';
+$vAccountnum ='';
 
 }else{
 
@@ -33,6 +37,11 @@ $vAddressline2= $addressinfo[0]->vAddressline2;
 $cityID= $addressinfo[0]->cityID;
 $districtID= $addressinfo[0]->districtID;
 $provinceID = $addressinfo[0]->provinceID;
+
+$bankID = $info[0]->bankID;
+$vBranchname = $info[0]->vBranchname;
+$vBranchcode = $info[0]->vBranchcode;
+$vAccountnum =$info[0]->vAccountnum;
 }
 @endphp
 <x-app-layout>
@@ -260,6 +269,54 @@ $provinceID = $addressinfo[0]->provinceID;
 
                                 </div>
 
+                                <div class=" cleafix"></div>
+                                <header><b>Bank Details</b></header>
+                                <br>
+                                <div class="row" >
+                                    
+                                    
+                                    <section class="col col-6">
+                                        <label class="label">Select The Bank <span style=" color: red;">*</span></label>
+                                        
+                                            <label class="select inp-holder">  
+                                                <div class="existing_city">
+                                            <select name="bankID" id="bankID" required="">
+                                                <option value="" ></option>
+                                                    @foreach($bank as $row)
+
+                                                    <option value="{{  $row->id }}" @if($row->id== $bankID)selected="selected" @endif > {{$row->name}}</option>
+
+                                                    @endforeach
+                                            </select>
+                                                    </div>
+                                            <i></i>
+                                            
+                                        </label>
+                                            
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Branch Name </label>
+                                        <label class="input inp-holder">
+                                            <input type="text" id="vBranchname" name="vBranchname"  value="{{$vBranchname}}">
+                                        </label>
+                                    </section> 
+                                       
+                                </div>
+                                <div class="row" >
+                                <section class="col col-6">
+                                        <label class="label">Branch Code </label>
+                                        <label class="input inp-holder">
+                                            <input type="text" id="vBranchcode" name="vBranchcode"  value="{{$vBranchcode}}">
+                                        </label>
+                                </section>
+                                <section class="col col-6">
+                                        <label class="label">Account Number </label>
+                                        <label class="input inp-holder">
+                                            <input type="text" id="vAccountnum" name="vAccountnum"  value="{{$vAccountnum}}">
+                                        </label>
+                                </section>
+
+                                </div>
 
 
                                 
@@ -376,12 +433,18 @@ $provinceID = $addressinfo[0]->provinceID;
                             required: true,
                             maxlength: 50,
                         },
-                        /*vLatitude: {
+                        bankID: {
                             required: true,
                         },
-                        vLongitude: {
+                        vBranchname: {
                             required: true,
-                        },*/
+                        },
+                        vBranchcode: {
+                            required: true,
+                        },
+                        vAccountnum: {
+                            required: true,
+                        },
 
                     },
                     messages: {
@@ -426,12 +489,18 @@ $provinceID = $addressinfo[0]->provinceID;
                             required: "Please enter the opening hours number",
                             maxlength: "Maximum length is 20",
                         },
-                       /* vLatitude: {
-                            required: "Please enter the google map latitude value",
+                        bankID: {
+                            required: "Please select a bank",
                         },
-                        vLongitude: {
-                            required: "Please enter the google map longitude value",
-                        },*/
+                        vBranchname: {
+                            required: "Please enter the branch name",
+                        },
+                        vBranchcode: {
+                            required: "Please enter the branch code",
+                        },
+                        vAccountnum: {
+                            required: "Please enter the account number",
+                        },
 
                     },
                     errorElement: 'span',

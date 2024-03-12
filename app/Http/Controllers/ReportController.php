@@ -11,6 +11,7 @@ use App\Models\Designcodemodel;
 use App\Models\Tyresizemodel;
 use App\Models\Vmodel;
 use App\Models\Compatible_model;
+use App\Models\Bankmodal;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
