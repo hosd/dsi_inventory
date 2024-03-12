@@ -57,7 +57,7 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
 
         $resultdata = $apidata->json();
         $resultdata = collect($resultdata);
-         dd($resultdata);
+        // dd($resultdata);
         return $resultdata;
     }
 
@@ -118,7 +118,7 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         }
     
         // Add an empty row between data rows
-        $mappedData[] = ['', '', '', '', '', '', '', ''];
+        $mappedData[] = ['', '', '', '', '', '', '', '', '', ''];
 
         // Add a row for the Dealer Income total
         $mappedData[] = [
