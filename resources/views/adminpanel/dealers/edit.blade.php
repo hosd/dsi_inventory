@@ -273,8 +273,7 @@ $vAccountnum =$info[0]->vAccountnum;
                                     <section class="col col-6">
                                         <label class="label">Select The Bank <span style=" color: red;">*</span></label>
                                         
-                                            <label class="select inp-holder">  
-                                                <div class="existing_city">
+                                            <label class="select inp-holder"> 
                                             <select name="bankID" id="bankID" required="">
                                                 <option value="" ></option>
                                                     @foreach($bank as $row)
@@ -283,7 +282,6 @@ $vAccountnum =$info[0]->vAccountnum;
 
                                                     @endforeach
                                             </select>
-                                                    </div>
                                             <i></i>
                                             
                                         </label>
