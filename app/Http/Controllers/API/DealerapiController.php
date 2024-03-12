@@ -43,13 +43,28 @@ class DealerapiController extends Controller {
 //            ]
 //        ];
         //  Retrieve dealers matching district and city
-        $selectedDealers = DB::table('dealers')
+        $query = DB::table('dealers')
+            ->join('address', 'dealers.addressID', '=', 'address.id')
+            ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
+            ->where('address.districtID', $data['district'])
+            ->where('dealers.status', '1');
+
+        if ($data['city']) {
+            $query = $query->where('address.cityID', $data['city']);
+        }
+
+        $selectedDealers = $query->get();
+        
+        // Check if $selectedDealers is empty and $data['city'] is true
+        if (count($selectedDealers) == 0 && $data['city'] && $data['district']) {
+            // Reload $selectedDealers with $data['district']
+            $selectedDealers = DB::table('dealers')
                 ->join('address', 'dealers.addressID', '=', 'address.id')
                 ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
-                ->where('districtID', $data['district'])
-                ->where('cityID', $data['city'])
-                ->where('status', '1')
+                ->where('address.districtID', $data['district'])
+                ->where('dealers.status', '1')
                 ->get();
+        }
 
         //  Filter dealers based on dealer stock matching JSON data
         $filteredDealers = $selectedDealers->filter(function ($dealer) use ($data) {

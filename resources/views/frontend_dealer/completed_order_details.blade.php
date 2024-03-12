@@ -116,13 +116,23 @@
                                     </tr>
                                 </thead>
                                 <tfoot>
+                                    @if($orderinfo['fixing_fee'] != 0)
+                                    <tr style="background-color: #ffe6e6">
+                                        <td></td>
+                                        <td class="text-end fw-bold">Fixing Fee (LKR)</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-end fw-bold text-end">{{ number_format($orderinfo['fixing_fee'], 2) }}</td>
+                                    </tr>
+                                    @endif
                                     <tr style="background-color: #ffe6e6">
                                         <td></td>
                                         <td class="text-end fw-bold">Grand Total (LKR)</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td class="text-end fw-bold pull-left">{{ number_format($orderinfo['ordervalue'], 2, '.', '') }}</td>
+                                        <td class="text-end fw-bold text-end">{{ number_format($orderinfo['ordervalue'], 2, '.', '') }}</td>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -132,8 +142,8 @@
                                       <td>{{$row['LabelName']}} - {{$row['ProductCode']}}</td>
                                       <td>{{ $row['Quantity'] }}</td>
                                       <td>{{number_format($row['UnitPrice'], 2, '.', '')}}</td>
-                                      <td>{{round($row['discount'])}}</td>
-                                      <td>{{ number_format(($row['Quantity']*$row['UnitPrice'])* (1 - round($row['discount']) / 100), 2, '.', '')}}</td>
+                                      <td>{{$row['discount']}}</td>
+                                      <td class="text-end">{{ number_format(($row['Quantity']*$row['UnitPrice'])* (1 - $row['discount'] / 100), 2, '.', '')}}</td>
                                     </tr>
                                     @endforeach
                                   </tbody>
