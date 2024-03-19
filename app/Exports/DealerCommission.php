@@ -108,7 +108,7 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
                 $data['label_name'] ?? null,
                 $data['productcode'] ?? null,
                 $data['quantity'] ?? null,
-                $data['grandtotal'] ?? null,
+                $data['invoicetotal'] ?? null,
                 ($data['quantity'] ?? 0) * ($data['dealer_charge'] ?? 0),
                 $dealer1->vAccountnum,
                 $dealer1->bank.'. '.$dealer1->vBranchname.'-'.$dealer1->vBranchcode,
@@ -118,10 +118,12 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         }
     
         // Add an empty row between data rows
-        $mappedData[] = ['', '', '', '', '', '', '', '', '', ''];
+        $mappedData[] = ['', '', '', '', '', '', '', '', '', '', '', ''];
 
         // Add a row for the Dealer Income total
         $mappedData[] = [
+            null,
+            null,
             null,
             null,
             null,
