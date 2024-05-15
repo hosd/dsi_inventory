@@ -144,7 +144,7 @@
                                                 <option value=""></option>
                                                 
                                                     @foreach($roles as $row)
-                                                    @if($row->id != '2')
+                                                    @if($row->id != '2' && $row->id != '3')
                                                     <option value="{{  $row->name }}" @if($row->id == $user->roleID)selected="selected" @endif > {{$row->name}}</option>
                                                    @endif
                                                     @endforeach

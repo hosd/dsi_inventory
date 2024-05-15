@@ -136,7 +136,7 @@
                       <select id="roles" name="roles" >
                         <option value=""></option>
                         @foreach($roles as $row)
-                        @if($row->id != '2')
+                        @if($row->id != '2' && $row->id != '3')
                         <option value="{{  $row->name }}" > {{$row->name}}</option>
                        @endif
                         @endforeach

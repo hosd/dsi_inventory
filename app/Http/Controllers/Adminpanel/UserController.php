@@ -43,6 +43,7 @@ class UserController extends Controller
                     ->select(array('users.*', 'roles.name as role'))
                     ->where('users.is_delete', '0')
                     ->where('users.roleID', '!=', '2')
+                    ->where('users.roleID', '!=', '3')
                     ->orderBy('users.id', 'ASC');
             //var_dump($data); exit();
             return Datatables::of($data)
