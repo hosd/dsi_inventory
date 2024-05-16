@@ -20,7 +20,7 @@
     <!--data table css-->
 
     <!-- Add icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('public/back/css/font-awesome.min.css') }}">
     <!-- Add icon library -->
     <!-- FAVICONS -->
 	<link rel="shortcut icon" href="{{ asset('public/back/img/favicon/favicon2.png') }}" type="image/x-icon">
@@ -31,13 +31,13 @@
         <!-- BOOTSTRAP JS -->
 	<script src="{{ asset('public/back/js/bootstrap/bootstrap.min.js') }}"></script>
         <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> -->
 
     <!-- Include Select2 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
 
     <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+	<script src="{{ asset('public/back/js/plugin/select2/select2.min.js') }}"></script>
         
     <title>DSI Tyres Dealer Inventory Management System | @yield('title')</title>
     </head>
@@ -70,8 +70,8 @@
     <script src="data_table/js/jquery-3.5.1.js"></script>
     <script src="data_table/js/jquery.dataTables.min.js"></script> -->
 
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('public/dealer/data_table/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/dealer/data_table/js/dataTables.bootstrap5.min.js') }}"></script>
     	<!-- JQUERY VALIDATE -->
 	<script src="{{ asset('public/back/js/plugin/jquery-validate/jquery.validate.min.js') }}"></script>
     <!-- Data table js files -->

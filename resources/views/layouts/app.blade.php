@@ -72,7 +72,8 @@
 	<!-- BOOTSTRAP JS -->
 	<script src="{{ asset('public/back/js/bootstrap/bootstrap.min.js') }}"></script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="{{ asset('public/back/ajax/libs/parsley.js/2.9.2/parsley.min.js') }}"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 	@if(Session()->get('applocale')=='ta')
 	<script src="{{ asset('public/back/js/i18n/ta.js') }}"></script>
 	@endif

@@ -846,16 +846,23 @@ class DealerloginContoller extends Controller {
                 'marketing4@dsityre.lk'
             );
             $to_email = $request->email;
-            \Mail::send('frontend_dealer.thanks_mail', 
-            [
-                'order' => $order,
-                'orderitem' => $orderitem, 
-                'user' => $user, 
-                'dealer' => $dealer
-            ], function ($message) use ($to_email, $bcc_email, $cc_email, $orderRef) {
-                $message->from('orders@dsityreshop.com', 'DSI Tyres');
-                $message->to($to_email)->cc($cc_email)->bcc($bcc_email)->subject('Thank You for Your DSI Tyres Purchase! - '.$orderRef);
-            });
+
+            try {
+                \Mail::send('frontend_dealer.thanks_mail', 
+                [
+                    'order' => $order,
+                    'orderitem' => $orderitem, 
+                    'user' => $user, 
+                    'dealer' => $dealer
+                ], function ($message) use ($to_email, $bcc_email, $cc_email, $orderRef) {
+                    $message->from('orders@dsityreshop.com', 'DSI Tyres');
+                    $message->to($to_email)->cc($cc_email)->bcc($bcc_email)->subject('Thank You for Your DSI Tyres Purchase! - '.$orderRef);
+                });
+
+            } catch (\Exception $e) {
+                \LogActivity::addToLog('Failed to send email: ' . $e->getMessage());
+                // return redirect()->back()->with('danger', 'Failed to send email. Try again later.');
+            }
         }
 
         return redirect('dealer/pending-orders')->with('success', 'Status updated successfully. Order number :' . $orderRef);
