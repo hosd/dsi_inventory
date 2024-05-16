@@ -138,7 +138,7 @@ class DealersContoller extends Controller
                 'dealer_name' => 'required|max:50',
                 'email' => 'required|max:50|email',
                 'phone' => 'required|max:20|min:10',
-                'vContactperson' => 'required|max:50',
+                'vContactperson' => 'max:50',
                 'vAddressline1' => 'required|max:50',
                 'vAddressline2' => 'required|max:50',
                 'status' => 'required',
