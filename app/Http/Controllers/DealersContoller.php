@@ -145,7 +145,10 @@ class DealersContoller extends Controller
                 'provinceID' => 'required',
                 'districtID' => 'required',
                 'cityID' => 'required',
-                'dealercode' => ['max:30', Rule::unique('dealers')->where(function ($query) use ($request) { return $query->where('id','!=', decrypt($request->id)); })],
+                'dealercode' => ['max:30', Rule::unique('dealers')->where(function ($query) use ($request) {
+                    return $query->where('id', '!=', decrypt($request->id))
+                                 ->whereNotNull('dealercode');})
+                                ],
                 'bankID'  => 'required',
                 'vBranchname'  => 'required|max:100',
                 'vBranchcode'  => 'required|max:50',
@@ -158,7 +161,7 @@ class DealersContoller extends Controller
         $data_arry['email'] = $request->email;
         $data_arry['phone'] = $request->phone;
         $data_arry['Contact_person'] = $request->vContactperson;
-         $data_arry['opening_hours'] = $request->vOpeninghours;
+        $data_arry['opening_hours'] = $request->vOpeninghours;
         $data_arry['vLatitude'] = $request->vLatitude;
         $data_arry['vLongitude'] = $request->vLongitude;
         $data_arry['status'] = $request->status;        
