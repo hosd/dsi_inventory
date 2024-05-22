@@ -66,7 +66,7 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
     /////////////////////////// DEALER LOGIN /////////////////////////////////
    
     // Route::middleware(['auth:dealer'])->group(function () {
-    Route::group(['middleware' => ['auth:dealer', 'dealer']], function () {
+    Route::group(['middleware' => ['auth:dealer', 'dealer', 'checkDealerLastActivity']], function () {
     Route::get('dealer/dashboard', [DealerloginContoller::class, 'dashboard'])->name('dealer/dashboard');     
     
     //stocks
@@ -95,20 +95,5 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
     Route::get('dealer/commission-report', [DealerloginContoller::class, 'commission_report'] )->name('commission-report');
     Route::post('dealer/commission-report-excel', [DealerloginContoller::class, 'commission_report_excel'])->name('commission-report-excel');
 });
-
-Route::group(['middleware' => ['auth:web']], function () {
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // });
-
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('dashboard-alloffices-summery', [DashboardController::class, 'officesSummery'])->name('dashboard-alloffices-summery');
-    Route::get('dashboard-office-summery', [DashboardController::class, 'individualOfficeSummery'])->name('dashboard-office-summery');
-
-    Route::view('profile', 'profile')->name('profile');
-    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    });
-
-
 
 require __DIR__ . '/auth.php';

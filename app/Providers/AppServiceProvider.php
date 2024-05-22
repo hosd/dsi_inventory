@@ -34,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
 
         if(config('app.env') === 'production') {
             \URL::forceScheme('https');
+            \Illuminate\Support\Facades\Response::macro('hsts', function ($value = 'max-age=31536000; includeSubDomains') {
+                return \Illuminate\Support\Facades\Response::make('', 200)->header('Strict-Transport-Security', $value);
+            });
         }
         View::composer('*', function ($view) {
             if (Auth::check()) {

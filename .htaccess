@@ -14,8 +14,42 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Redirect all HTTP requests to HTTPS
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+<IfModule mod_headers.c>
+    # Set Content-Security-Policy header
+    # Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self';"
+
+    # Set X-Frame-Options header to 'DENY'
+    Header always append X-Frame-Options "DENY"
+
+    # Set X-Content-Type-Options header to 'nosniff'
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Set the Content-Type header to appropriate value (e.g., text/html for HTML pages)
+    <FilesMatch "\.(html|htm)$">
+        Header set Content-Type "text/html; charset=UTF-8"
+    </FilesMatch>
+    <FilesMatch "\.(css)$">
+        Header set Content-Type "text/css; charset=UTF-8"
+    </FilesMatch>
+    <FilesMatch "\.(js)$">
+        Header set Content-Type "application/javascript; charset=UTF-8"
+    </FilesMatch>
+
+    # Add HttpOnly and Secure flags to cookies (note: may not apply to all cookies)
+    Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
+
+    # Apply a no-referrer policy to sensitive pages
+    <Files "sensitive-page.php">
+        Header set Referrer-Policy "no-referrer"
+    </Files>
+</IfModule>
+

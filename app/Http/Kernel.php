@@ -72,6 +72,8 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'dealer.auth' => \App\Http\Middleware\RedirectIfDealerSessionExpired::class,
-        'dealer' => \App\Http\Middleware\DealerMiddleware::class
+        'dealer' => \App\Http\Middleware\DealerMiddleware::class,
+        'checkLastActivity' => \App\Http\Middleware\CheckLastActivity::class,
+        'checkDealerLastActivity' => \App\Http\Middleware\CheckDealerLastActivity::class,
     ];
 }

@@ -30,8 +30,9 @@ use App\Http\Controllers\CancelledOrderController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\masterdata\BankContoller;
 
-
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Adminpanel\DashboardController;
 
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -87,7 +88,7 @@ Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth:web', 'checkLastActivity']], function () {
     Route::resource('roles', RoleController::class);
     Route::get('role-list',[RoleController::class,'index'])->name('role-list');
     Route::put('update-role', [RoleController::class, 'update'])->name('update-role');
@@ -226,5 +227,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('report-list', [ReportController::class, 'index'])->name('report-list');
     Route::get('dealer-commission-report', [ReportController::class, 'dealer_commission'])->name('dealer-commission-report');
     Route::post('dealer-commission-report-excel', [ReportController::class, 'dealer_commission_report_excel'])->name('dealer-commission-report-excel');
+
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::view('profile', 'profile')->name('profile');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     
 });

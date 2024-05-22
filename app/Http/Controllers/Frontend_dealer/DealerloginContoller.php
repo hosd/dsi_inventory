@@ -20,6 +20,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DealerCommission;
+use Illuminate\Support\Facades\Session;
+use App\Models\DealerSessionModel;
 
 class DealerloginContoller extends Controller {
 
@@ -53,7 +55,7 @@ class DealerloginContoller extends Controller {
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
+                ])->post('https://uat.dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
         $resultdata = $apidata->json();
 
@@ -74,7 +76,7 @@ class DealerloginContoller extends Controller {
             $token = $this->generatedToken();
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+                    ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
 
             $resultdata = $apidata->json();
         }
@@ -107,11 +109,26 @@ class DealerloginContoller extends Controller {
     
         if (Auth::guard('dealer')->attempt($credentials)) {
             $user = Auth::guard('dealer')->user();
-    
+            $request->session()->regenerate();
             if ($user->status == "Y") {
                 // Check if the user's role is either 2 or 3
                 if ($user->roleID === 2 || $user->roleID === 3) {
                     if ($user) {
+
+                        // Retrieve the user's stored session IDs from the database
+                        $storedSessionIds = DealerSessionModel::where('dealer_id', $user->id)->pluck('session_id');
+
+                        // Get the current session ID
+                        $currentSessionId = $request->session()->getId();
+
+                        // Delete old session records except for the current session
+                        DealerSessionModel::where('dealer_id', $user->id)
+                                    ->whereNotIn('session_id', [$currentSessionId])
+                                    ->delete();
+
+                        // Update or create a new session record for the current session
+                        DealerSessionModel::updateOrCreate(['dealer_id' => $user->id], ['session_id' => $currentSessionId]);
+
                         // Store user data in the session
                         $request->session()->put('dealer_data', [
                             'id' => $user->id,
@@ -146,6 +163,9 @@ class DealerloginContoller extends Controller {
     }    
 
     public function logout(Request $request) {
+        
+        DealerSessionModel::where('dealer_id', session('dealer_data.id'))->delete();
+
         Auth::guard('dealer')->logout();
 
         // $request->session()->invalidate();
@@ -630,7 +650,7 @@ class DealerloginContoller extends Controller {
 
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
+                    ])->post('https://uat.dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
             /* $data = [
               "orderList" => [
@@ -697,7 +717,7 @@ class DealerloginContoller extends Controller {
 
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
+                    ])->post('https://uat.dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
             $resultdata = $apidata->json(); //var_dump($apidata['orderList']); die();
 
@@ -734,7 +754,7 @@ class DealerloginContoller extends Controller {
 
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
+                    ])->post('https://uat.dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . $delaerID);
 
             $resultdata = $apidata->json(); //var_dump($apidata['orderList']); die();
             // Check if $resultdata is empty
@@ -774,7 +794,7 @@ class DealerloginContoller extends Controller {
 
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
+                ])->post('https://uat.dsityreshop.com/api/get-order-details?orderID=' . $id);
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];
@@ -799,7 +819,7 @@ class DealerloginContoller extends Controller {
         
         $apidata = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
+                ])->post('https://uat.dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
         $resultdata = $apidata->json();
 
         \LogActivity::addToAPILog('order status updated - orderRef: ' . $orderRef . ' Status: ' . $status . '. API response :' . $resultdata['message']);
@@ -807,7 +827,7 @@ class DealerloginContoller extends Controller {
         if($status == "cancelled"){
             $apidata1 = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
+                    ])->post('https://uat.dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
             $resultdata1 = $apidata1->json();
             $productlist = $resultdata1['ProductList'];
 
@@ -823,7 +843,7 @@ class DealerloginContoller extends Controller {
 
             $apidata = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
+                    ])->post('https://uat.dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
             $resultdata = $apidata->json();
             // dd($resultdata);
             $order = $resultdata['orderdetails'];
@@ -846,7 +866,9 @@ class DealerloginContoller extends Controller {
                 'marketing4@dsityre.lk'
             );
             $to_email = $request->email;
-
+            
+            $this->send_sales_invoice($orderRef);
+            
             try {
                 \Mail::send('frontend_dealer.thanks_mail', 
                 [
@@ -873,7 +895,7 @@ class DealerloginContoller extends Controller {
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::post('https://uat.dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {
@@ -909,7 +931,7 @@ class DealerloginContoller extends Controller {
                 $token = $this->generatedToken();
                 $apidata = Http::withHeaders([
                             'Authorization' => 'Bearer ' . $token,
-                        ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+                        ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
     
                 $resultdata = $apidata->json();
             }
@@ -964,6 +986,25 @@ class DealerloginContoller extends Controller {
         $current_date = date('Y_m_d_H_i');
         $filename = 'Report';
         return Excel::download(new DealerCommission($dealer_id, $ordered_from, $ordered_to), "$filename _ $current_date.xlsx");
+    }
+
+    public function send_sales_invoice($orderRef)
+    {
+        try {
+            $token = $this->generatedToken();
+            
+            $apidata = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->post('https://uat.dsityreshop.com/api/send-sales-invoice?orderRef=' . $orderRef);
+
+            $resultData = $apidata->json();
+            // dd($resultData);
+            \LogActivity::addToAPILog('send_sales_invoice output : ' . json_encode($resultData));
+            // Return the response
+            return;
+        } catch (\Exception $e) {
+            \LogActivity::addToAPILog('Error in send_sales_invoice: ' . $e->getMessage());
+        }
     }
 
 }

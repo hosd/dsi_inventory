@@ -68,7 +68,8 @@
 
 	<!-- Scripts -->
 	<script src="{{ asset('public/js/app.js') }}" defer></script>
-	<script src="{{ asset('public/back/js/jquery.min.js') }}"></script>
+	<!-- <script src="{{ asset('public/back/js/jquery.min.js') }}"></script> -->
+    <script src="{{ asset('public/back/js/jquery-3.7.1.min.js') }}"></script>
 	<!-- BOOTSTRAP JS -->
 	<script src="{{ asset('public/back/js/bootstrap/bootstrap.min.js') }}"></script>
 
@@ -416,6 +417,11 @@
             }                    
 	</style>
 	{{ $header }}
+	<script type="text/javascript">
+        if (window.top !== window.self) {
+            window.top.location = window.self.location;
+        }
+    </script>
 </head>
 
 <body class="">

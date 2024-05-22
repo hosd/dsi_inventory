@@ -40,6 +40,11 @@
 	<script src="{{ asset('public/back/js/plugin/select2/select2.min.js') }}"></script>
         
     <title>DSI Tyres Dealer Inventory Management System | @yield('title')</title>
+    <script type="text/javascript">
+        if (window.top !== window.self) {
+            window.top.location = window.self.location;
+        }
+    </script>
     </head>
     
     <body>
