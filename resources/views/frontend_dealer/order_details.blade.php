@@ -77,7 +77,7 @@
             </div>
             <div class="line-div" style="margin-bottom: 10px"></div>
             <div class="text-end" style="margin-top: 10px">
-                <button type="submit" class="btn btn-primary text-end">Submit</button>
+                <button type="submit" class="btn btn-primary text-end" id="submitBtn">Submit</button>
                 <a class="btn btn-default" href="{{route('dealer/pending-orders')}}"> Back</a>
 
                 <input type="hidden" id="dealerID" name="dealerID" value="{{auth()->user()->dealerID }}" />
@@ -314,6 +314,10 @@ $('#changepwno').click(function () { // click to
                     }
                     return true; // Skip validation if either value is not entered
                 }, "Reorder quantity cannot be equal or greater than quantity.");
+
+                $('#user_details_form').on('submit', function() {
+                    $('#submitBtn').prop('disabled', true);
+                });
 
 
 
