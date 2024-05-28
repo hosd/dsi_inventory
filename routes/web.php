@@ -71,7 +71,7 @@ Route::get('/get-API-token', [AccessTokenController::class, 'getToken'])->name('
     
     //stocks
     Route::get('dealer/dealer-stock-list', [DealerloginContoller::class, 'stock_list'])->name('dealer/dealer-stock-list'); 
-    Route::post('get-product-codes', [DealerloginContoller::class, 'get_product_codes']) ->name('get-product-codes');
+    Route::get('get-product-codes', [DealerloginContoller::class, 'get_product_codes']) ->name('get-product-codes');
     Route::post('save-dealer-stocks', [DealerloginContoller::class, 'store'])->name('save-dealer-stocks');
     Route::get('/status-dealer-stock/{id}', [DealerloginContoller::class, 'activation'])->name('status-dealer-stock');
     Route::get('dealer/reorder-stocks', [DealerloginContoller::class, 'reorder_stock_list'])->name('dealer/reorder-stocks'); 

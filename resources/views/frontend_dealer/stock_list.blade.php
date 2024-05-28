@@ -590,7 +590,7 @@
 
     $.ajax({
         url: "{{ route('get-product-codes') }}",
-        type: 'post',
+        type: 'get',
         dataType: 'json',
         data: {
             "_token": "{{ csrf_token() }}",
