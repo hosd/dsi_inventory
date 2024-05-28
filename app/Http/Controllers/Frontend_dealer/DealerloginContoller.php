@@ -816,13 +816,6 @@ class DealerloginContoller extends Controller {
         $orderRef = $request->orderRef;
 
         $token = $this->generatedToken();
-        
-        $apidata = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
-        $resultdata = $apidata->json();
-
-        \LogActivity::addToAPILog('order status updated - orderRef: ' . $orderRef . ' Status: ' . $status . '. API response :' . $resultdata['message']);
 
         if($status == "cancelled"){
             $apidata1 = Http::withHeaders([
@@ -841,14 +834,14 @@ class DealerloginContoller extends Controller {
         } else if($status == "completed"){
             $token = $this->generatedToken();
 
-            $apidata = Http::withHeaders([
+            $apidata2 = Http::withHeaders([
                         'Authorization' => 'Bearer ' . $token,
                     ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $orderRef);
-            $resultdata = $apidata->json();
-            // dd($resultdata);
-            $order = $resultdata['orderdetails'];
-            $orderitem = $resultdata['ProductList'];
-            $user = $resultdata['Customer'];
+            $resultdata2 = $apidata2->json();
+            // dd($resultdata2);
+            $order = $resultdata2['orderdetails'];
+            $orderitem = $resultdata2['ProductList'];
+            $user = $resultdata2['Customer'];
             $dealer = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
                     ->select('dealers.*','address.vAddressline1','address.vAddressline2')
                     ->where('dealers.id',$order['dealerID'])
@@ -886,6 +879,13 @@ class DealerloginContoller extends Controller {
                 // return redirect()->back()->with('danger', 'Failed to send email. Try again later.');
             }
         }
+        
+        $apidata = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://dsityreshop.com/api/update-order?orderID=' . $orderID . '&orderRef=' . $orderRef . '&status=' . $status . '&completeddate=' . '' . '&canceleddate=' . '');
+        $resultdata = $apidata->json();
+
+        \LogActivity::addToAPILog('order status updated - orderRef: ' . $orderRef . ' Status: ' . $status . '. API response :' . $resultdata['message']);
 
         return redirect('dealer/pending-orders')->with('success', 'Status updated successfully. Order number :' . $orderRef);
     }
