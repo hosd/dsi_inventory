@@ -13,7 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        // Commands\PaymentStatus::class,
+        Commands\ProductApi::class,
+        Commands\ProductPriceApi::class,
+        Commands\ProductDiscountApi::class
     ];
 
     /**
@@ -24,7 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('product:api')->dailyAt('11:30');
+        $schedule->command('productprice:api')->dailyAt('11:30');
+        $schedule->command('productdiscount:api')->dailyAt('11:30');
     }
 
     /**
