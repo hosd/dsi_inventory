@@ -849,7 +849,7 @@ class DealerloginContoller extends Controller {
             $cc_email = $dealer->email;
             $bcc_email = array(
                 'karshan@tekgeeks.net',
-                'onilne_orders_team@dsityre.lk'
+                'online_orders_team@dsityreshop.com'
             );
             $to_email = $request->email;
             
