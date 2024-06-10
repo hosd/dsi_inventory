@@ -405,7 +405,6 @@ class ReportController extends Controller
                         })
                         ->addColumn('dealer', function ($row) {
                             $dealer1 = Dealers::find($row['dealerID']);
-                            return $dealer1->name.' - '.$dealer1->dealercode;
                             if ($dealer1) {
                                 return $dealer1->name.' - '.$dealer1->dealercode;
                             } else {
