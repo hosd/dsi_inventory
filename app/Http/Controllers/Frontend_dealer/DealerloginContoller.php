@@ -612,14 +612,14 @@ class DealerloginContoller extends Controller {
         $id = decrypt($request->id);
         if ($request->password) {
             $request->validate([
-                'name' => 'required|max:50',
+                // 'name' => 'required|max:50',
                 'password' => 'same:confirmpassword',
                 //'password' => 'same:confirmpassword',
                 'phone' => 'required|max:20|min:10'
                     // 'status' => 'required'
             ]);
 
-            $data_arry['name'] = $request->name;
+            // $data_arry['name'] = $request->name;
             $data_arry['mobile_no'] = $request->phone;
             $data_arry['password'] = Hash::make($request->password);
         } else {

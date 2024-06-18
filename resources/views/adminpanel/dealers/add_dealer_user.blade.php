@@ -113,8 +113,8 @@ $status = $Userinfo[0]->status;
                                         <label class="label">Status</label>
                                         <label class="select">
                                             <select name="status" id="status">
-                                                <option value="1" @if( $status == '1') selected="selected" @endif>Active</option>
-                                                <option value="0" @if( $status == '0') selected="selected" @endif>Inactive</option>
+                                                <option value="Y" @if( $status == 'Y') selected="selected" @endif>Active</option>
+                                                <option value="N" @if( $status == 'N') selected="selected" @endif>Inactive</option>
                                             </select>
                                             <i></i>
                                         </label>

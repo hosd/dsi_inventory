@@ -106,7 +106,7 @@
                                
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary submit_btn me-2">Submit</button>
+                                <button type="button" class="btn btn-primary submit_btn me-2" id="button3">Submit</button>
                                 <button type="button" class="btn btn-secondary close_btn" data-bs-dismiss="modal">Close</button>
                                 <input type="hidden" id="dealerID" name="dealerID" value="{{auth()->user()->dealerID}}" />
                                 <input type="hidden" id="savestatus" name="savestatus" value="{{$savestatus}}" />
@@ -127,7 +127,6 @@
                                         <button type="button" class="btn-close" style="background-color: white;" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body popup_form_content">
-
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6 col-12">
 
@@ -151,7 +150,7 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary submit_btn me-2">Submit</button>
+                                        <button type="button" class="btn btn-primary submit_btn me-2" id="button1">Submit</button>
                                         <button type="button" class="btn btn-secondary close_btn" data-bs-dismiss="modal">Close</button>
                                         <input type="hidden" id="dealerID" name="dealerID" value="{{auth()->user()->dealerID}}" />
                                         <input type="hidden" id="recIDstock" name="recIDstock" value="" />
@@ -209,7 +208,7 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary submit_btn me-2">Submit</button>
+                                        <button type="button" class="btn btn-primary submit_btn me-2" id="button2">Submit</button>
                                         <button type="button" class="btn btn-secondary close_btn" data-bs-dismiss="modal">Close</button>
                                         <input type="hidden" id="dealerID" name="dealerID" value="{{auth()->user()->dealerID}}" />
                                         <input type="hidden" id="recIDitem" name="recIDitem" value="" />
@@ -679,6 +678,77 @@
                     }
                 });
 
+            });
+
+            $(document).ready(function() {
+                $('#button1').on('click', function(e) {
+                    e.preventDefault(); // Prevent default button action
+
+                    var formData = new FormData($('#edit_stock_form')[0]);
+
+                    $.ajax({
+                        url: "{{ route('save-dealer-stocks') }}",
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#edit_stock_form')[0].reset();
+                            $('.modal').modal('hide');
+                            $('.data-table').DataTable().ajax.reload(null, false);
+                        },
+                        error: function(xhr) {
+                            // Handle error response
+                            alert('Error: ' + xhr.responseText);
+                        }
+                    });
+                });
+
+                $('#button2').on('click', function(e) {
+                    e.preventDefault(); // Prevent default button action
+
+                    var formData = new FormData($('#edit_item_form')[0]);
+
+                    $.ajax({
+                        url: "{{ route('save-dealer-stocks') }}",
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#edit_item_form')[0].reset();
+                            $('.modal').modal('hide');
+                            $('.data-table').DataTable().ajax.reload(null, false);
+                        },
+                        error: function(xhr) {
+                            // Handle error response
+                            alert('Error: ' + xhr.responseText);
+                        }
+                    });
+                });
+
+                $('#button3').on('click', function(e) {
+                    e.preventDefault(); // Prevent default button action
+
+                    var formData = new FormData($('#store_details_form')[0]);
+
+                    $.ajax({
+                        url: "{{ route('save-dealer-stocks') }}",
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            $('#store_details_form')[0].reset();
+                            $('.modal').modal('hide');
+                            $('.data-table').DataTable().ajax.reload(null, false);
+                        },
+                        error: function(xhr) {
+                            // Handle error response
+                            alert('Error: ' + xhr.responseText);
+                        }
+                    });
+                });
             });
             </script>
             
