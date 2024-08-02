@@ -55,7 +55,7 @@
                                         <th scope="col">Total (Rs.)</th>
                                         <th scope="col">Customer Name</th>
                                         <th scope="col">Mobile Number</th>
-                                        <th scope="col">View & Update</th>
+                                        <!-- <th scope="col">View & Update</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -142,13 +142,13 @@
                             name: 'mobile',
                             "className": "text-center"
                         },
-                        {
-                            data: 'edit',
-                            name: 'edit',
-                            "className": "text-center",
-                            orderable: false,
-                            searchable: false
-                        },
+                        // {
+                        //     data: 'edit',
+                        //     name: 'edit',
+                        //     "className": "text-center",
+                        //     orderable: false,
+                        //     searchable: false
+                        // },
                         
                     ]
                     

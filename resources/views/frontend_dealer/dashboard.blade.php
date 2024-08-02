@@ -108,12 +108,37 @@
                             <div class="col-lg-6 col-12">
                                 <a href="">
                                     <div class="db_summary_card">
-                                        <h5>Monthly Dealer Income</h5>
+                                        <h5>Monthly Dealer's Income</h5>
                                         <h1 class="text-end mb-0">LKR {{ number_format($monthly_total, 2) }}</h1>
                                     </div>
                                 </a>
                                 <br class="d-lg-none d-block">
                             </div>
+                            <div class="col-lg-3 col-12">
+                                <a href="{{route('dealer/reorder-stocks')}}">
+                                    <div class="db_summary_card">
+                                        <h5>Paid Commission</h5>
+                                        <h1 class="text-end mb-0">LKR {{ number_format($paid_commission, 2) }}</h1>
+                                    </div>
+                                </a>
+                                <br class="d-lg-none d-block">
+                            </div>
+                            <div class="col-lg-3 col-12">
+                                <a href="{{route('dealer/reorder-stocks')}}">
+                                    <div class="db_summary_card">
+                                        <h5>Balance Commission</h5>
+                                        @php 
+                                            $balance = $monthly_total - $paid_commission;
+                                        @endphp
+                                        <h1 class="text-end mb-0">LKR {{ number_format($balance, 2) }}</h1>
+                                    </div>
+                                </a>
+                                <br class="d-lg-none d-block">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="clearfix"></div>
+                        <div class="row" >
                             <div class="col-lg-3 col-12">
                                 <a href="{{route('dealer/reorder-stocks')}}">
                                     <div class="db_summary_card">

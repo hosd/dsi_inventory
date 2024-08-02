@@ -1,5 +1,8 @@
 @section('title', 'Dealers')
-
+@php
+    $addnew_url = route('new-dealer-commission',$Dealer_ID);
+    $list_url = route('dealer-commission-list',$Dealer_ID);
+@endphp
 <x-app-layout>
     <x-slot name="header">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -64,12 +67,16 @@
             <div class="row">
             <div class="col-lg-12">
                     <div class="row cms_top_btn_row" style="margin-left:auto;margin-right:auto;"> 
-                        <a href="{{ route('new-dealers') }}">
-                            <button class="btn cms_top_btn top_btn_height ">ADD NEW DEALER </button>
+                        
+                        <a href="{{ $addnew_url  }}">
+                            <button class="btn cms_top_btn top_btn_height cms_top_btn_active">ADD NEW DEALER COMMISSION</button>
                         </a>
 
-                        <a href="{{ route('dealers-list') }}">
-                            <button class="btn cms_top_btn top_btn_height cms_top_btn_active">VIEW ALL DEALERS <br> {{count($count)}}</button>
+                        <a href="{{ $list_url }}">
+                            <button class="btn cms_top_btn top_btn_height ">VIEW ALL DEALER COMMISSIONS</button>
+                        </a>
+                        <a href="{{ route('dealers-list')  }}">
+                            <button class="btn cms_top_btn top_btn_height cms_top_btn_active">DEALERS LIST</button>
                         </a>
                     </div>
                 </div>
@@ -92,7 +99,7 @@
                         <div class="jarviswidget jarviswidget-color-darken" id="user_types" data-widget-editbutton="false">
                             <header>
                                 <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                                <h2>Dealers List</h2>
+                                <h2>Commission list of {{$info[0]->name}} dealer</h2>
                             </header>
                             <!-- widget div-->
                             <div>
@@ -107,19 +114,10 @@
                                         <thead>
                                             <tr >
                                                 <th width="5%">No</th>
-                                                <th width="10%">Dealer Name</th>  
-                                                <th width="10%">Code</th>
-                                                <th width="10%">Email</th>
-                                                <th width="10%">Phone Number</th>
-                                                
-                                                <th width="10%">Territory</th>
-                                                <th width="10%">Town</th>
-                                                <th width="10%">Status</th>
-                                                <th width="5%">Edit</th>
-                                                <th width="5%" align="center" >Activation</th>
-                                                <th width="5%" align="center" >Users</th>
-                                                <th width="5%" align="center" >Pay Commission</th>
-                                                <!-- <th width="5%" align="center" >Paid Total Commission</th> -->
+                                                <th width="10%">Commission</th>  
+                                                <th width="15%">Date</th>
+                                                <th width="10%">Edit</th>
+                                                <th width="10%" align="center" >Activation</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -152,42 +150,20 @@
                 var table = $('.data-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('dealers-list') }}",
+                    ajax: "{{ route('dealer-commission-list',$Dealer_ID) }}",
                     order: [ 1, 'asc' ],
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'id'
                         },
                         {
-                            data: 'name',
-                            name: 'name'
+                            data: 'commission',
+                            name: 'commission'
                         },
                         {
-                            data: 'dealercode',
-                            name: 'dealercode'
+                            data: 'date',
+                            name: 'date'
                         },
-                        {
-                            data: 'email',
-                            name: 'email'
-                        },
-                        {
-                            data: 'phone',
-                            name: 'phone'
-                        },
-                        
-                        {
-                            data: 'state',
-                            name: 'state'
-                        },
-                        {
-                            data: 'city',
-                            name: 'city'
-                        },
-                        {
-                            data: 'status',
-                            name: 'status'
-                        },
-                        
                         {
                             data: 'edit',
                             name: 'edit',
@@ -202,24 +178,7 @@
                             orderable: false,
                             searchable: false
                         },
-                        {
-                             data: 'users',
-                            name: 'users',
-                            "className": "text-center",
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'commission',
-                            name: 'commission',
-                            "className": "text-center",
-                            orderable: false,
-                            searchable: false
-                        },
-                        // {
-                        //     data: 'total_paid',
-                        //     name: 'total_paid'
-                        // },
+                        
                     ]
                 });
 

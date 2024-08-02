@@ -72,6 +72,9 @@ class DealerloginContoller extends Controller {
         $ordered_from = Carbon::now()->firstOfMonth()->format('Y-m-d 00:00:00');
         $ordered_to = Carbon::now()->endOfMonth()->format('Y-m-d 23:59:59');
 
+        $settled_from = Carbon::now()->firstOfMonth()->format('Y-m-d');
+        $settled_to = Carbon::now()->endOfMonth()->format('Y-m-d');
+
         if($dealer_id){
             $token = $this->generatedToken();
             $apidata = Http::withHeaders([
@@ -89,7 +92,16 @@ class DealerloginContoller extends Controller {
             }
         }
 
-        return view('frontend_dealer.dashboard')->with(['count' => $count, 'pendingout' => $pendingout, 'monthly_total' => $monthly_total]);
+        $paid_commission = DB::table('dealer_commissions')
+                        ->where('dealerID', $dealer_id)
+                        ->where('status', 'Y')
+                        ->where('is_delete', 0)
+                        ->where('date', '>=', $settled_from)
+                        ->where('date', '<=', $settled_to)
+                        ->sum('commission');
+
+
+        return view('frontend_dealer.dashboard')->with(['count' => $count, 'pendingout' => $pendingout, 'monthly_total' => $monthly_total, 'paid_commission' => $paid_commission]);
     }
 
     public function login(Request $request) {

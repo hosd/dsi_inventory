@@ -88,7 +88,7 @@
                                             <section class="col col-4">
                                                 <label class="label">Dealer</label>
                                                 <select class="select2" id="dealer_id" name="dealer_id" required>
-                                                    <option value="">Select</option>
+                                                    <option value="all">All</option>
                                                     @foreach($dealers as $row)
                                                     <option value="{{  $row->id }}" > {{$row->name}}</option>
                                                     @endforeach

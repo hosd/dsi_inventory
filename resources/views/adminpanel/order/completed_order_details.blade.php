@@ -27,7 +27,7 @@
                     <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
+            </div
             @endif
             @if ($message = Session::get('success'))
             <div class="alert alert-success">
@@ -82,6 +82,7 @@
                                         <td align="center" bgcolor="#BECFE9" width="5%"><p>Quantity</p></td>
                                         <td align="center" bgcolor="#BECFE9" width="13%"><p>Unit Price (LKR)</p></td>
                                         <td align="center" bgcolor="#BECFE9" width="13%"><p>Discount % </p></td>
+                                        <td align="center" bgcolor="#BECFE9" width="13%"><p>Discount Price (LKR)</p></td>
                                         <td align="center" bgcolor="#BECFE9" width="13%"><p>Total (LKR)</p></td>
                                     </tr>
                                     @php
@@ -97,14 +98,17 @@
                                             <td align="center" bgcolor="#FFFFFF" valign="top" style="">{{ $item['Quantity'] }}</td>
                                             <td align="right" bgcolor="#FFFFFF" valign="top" style="">{{ number_format($item['UnitPrice'], 2) }}&nbsp;</td>
                                             <td align="right" bgcolor="#FFFFFF" valign="top" style="">{{ number_format($item['discount'], 2) }}&nbsp;</td>
-                                            <td align="right" bgcolor="#FFFFFF" valign="top" style="">{{ number_format(($item['Quantity']*$item['UnitPrice'])* (1 - round($item['discount']) / 100), 2) }}&nbsp;</td>
+                                            <td align="right" bgcolor="#FFFFFF" valign="top" style="">{{ number_format($item['itemdiscount'], 2) }}&nbsp;</td>
+                                            <td align="right" bgcolor="#FFFFFF" valign="top" style="">{{ number_format($item['subtotal'], 2) }}&nbsp;</td>
                                         </tr>
                                     @endforeach
-                                    
-                                    
+                                        <tr>
+                                            <td colspan="2" align="right" valign="middle" bgcolor="#FFFFFF">Fixing Fee (LKR)</td>
+                                            <td colspan="5" align="right" valign="middle" bgcolor="#FFFFFF">{{ number_format($orderinfo['fixing_fee'], 2, '.', '') }}&nbsp;</td>
+                                        </tr>
                                         <tr>
                                             <td colspan="2" align="right" valign="middle" bgcolor="#FFFFFF"><h4>Grand Total (LKR)</h4></td>
-                                            <td colspan="4" align="right" valign="middle" bgcolor="#FFFFFF"><h4>{{ number_format($orderinfo['ordervalue'], 2, '.', '') }}&nbsp;</h4></td>
+                                            <td colspan="5" align="right" valign="middle" bgcolor="#FFFFFF"><h4>{{ number_format($orderinfo['ordervalue'], 2, '.', '') }}&nbsp;</h4></td>
                                         </tr>
                                 </tbody>
                             </table>

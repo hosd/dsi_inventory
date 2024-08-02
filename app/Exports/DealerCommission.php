@@ -77,7 +77,10 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
             'Order Value',
             'Dealer Income',
             'To Bank Account',
-            'Bank Details'
+            'Bank Name',
+            'Bank Branch',
+            'Branch Code',
+            'SONP Number'
         ];
     }
 
@@ -95,14 +98,24 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
             ->where('dealers.id',$data['dealerID'])
             ->select('dealers.*','address.vAddressline1','address.vAddressline2','cities.city_name_en as city','provinces.province_name_en as province','districts.district_name_en as state','bank.name as bank')
             ->first();
+
+            $address = implode(', ', array_filter([
+                $dealer1->vAddressline1 ?? null,
+                $dealer1->vAddressline2 ?? null,
+                $dealer1->city ?? null,
+                $dealer1->state ?? null,
+                $dealer1->province ?? null
+            ]));
+
+            $accountNum = $dealer1->vAccountnum ?? null;
+        
             $mappedData[] = [
-                
                 $data['orderdate'] ?? null,
-                $dealer1->dealercode,
-                $dealer1->name,
-                $dealer1->vAddressline1.','.$dealer1->vAddressline2.','.$dealer1->city.','.$dealer1->state.','.$dealer1->province,
-                $dealer1->city,
-                $dealer1->phone,
+                $dealer1->dealercode ?? null,
+                $dealer1->name ?? null,
+                $address,
+                $dealer1->city ?? null,
+                $dealer1->phone ?? null,
                 $data['name'] ?? null,
                 $data['orderRef'] ?? null,
                 $data['label_name'] ?? null,
@@ -110,8 +123,11 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
                 $data['quantity'] ?? null,
                 $data['invoicetotal'] ?? null,
                 ($data['quantity'] ?? 0) * ($data['dealer_charge'] ?? 0),
-                $dealer1->vAccountnum,
-                $dealer1->bank.'. '.$dealer1->vBranchname.'-'.$dealer1->vBranchcode,
+                ($accountNum != null) ? ' '.$accountNum.' ': $accountNum,
+                $dealer1->bank ?? '',
+                $dealer1->vBranchname ?? '',
+                $dealer1->vBranchcode ?? '',
+                $data['sonp'] ?? null,
             ];
     
             $dealerChargeTotal += ($data['quantity'] ?? 0) * ($data['dealer_charge'] ?? 0);

@@ -351,7 +351,11 @@ class ReportController extends Controller
         $dealers = Dealers::select('dealers.*')->get();
 
         if ($request->ajax()) {
-            $dealer_id = $request->dealer_id;
+            if($request->dealer_id)
+            {
+                $dealer_id = $request->dealer_id;
+            }
+            
             if($request->ordered_from)
             { 
                 $ordered_from = date("Y-m-d 00:00:00", strtotime($request->ordered_from)); 

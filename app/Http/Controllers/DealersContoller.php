@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Bankmodal;
+use App\Models\DealerCommission;
 
 class DealersContoller extends Controller
 {
@@ -75,7 +76,18 @@ class DealersContoller extends Controller
                     $btn = '<a href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
                     return $btn;
                 }) 
-                
+                ->addColumn('commission', function ($row) {
+
+                    $edit_url = route('dealer-commission-list',encrypt($row->id));
+                     $btn = '<a href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                     return $btn;
+                 })
+                //  ->addColumn('total_paid', function ($row) {
+
+                //     $commission = DealerCommission::where('dealerID',$row->id)->where('status', 'Y')->where('is_delete',0)->sum('commission');
+                //     return $commission;
+                //  }) 
+                 
                 ->addColumn('activation', function($row){
                     if ( $row->status == "1" )
                         $status ='fa fa-check';
@@ -100,7 +112,7 @@ class DealersContoller extends Controller
                 
                 //->addColumn('edit', 'dealers.actionsEdit')
                 //->addColumn('activation', 'dealers.actionsStatus')
-                ->rawColumns(['edit', 'activation','users'])
+                ->rawColumns(['edit', 'activation','users', 'commission'])
                 ->make(true);
         }
 
@@ -526,6 +538,156 @@ class DealersContoller extends Controller
 
     }
     
-    
-    
+    public function dealer_commission_list(Request $request)
+    {   
+        $Dealer_ID = request()->segment(2);
+        $ID_dealer = decrypt($Dealer_ID);
+        $info = Dealers::where('id', '=', $ID_dealer)->get();
+        
+        if ($request->ajax()) {
+            $data = DealerCommission::where('dealerID',$ID_dealer)
+                    ->orderBy('date','DESC')
+                    ->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('edit', function ($row) {
+
+                   $edit_url = route('edit-dealer-commission',encrypt($row->id));
+                    $btn = '<a href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                    return $btn;
+                }) 
+                
+                ->addColumn('activation', function($row){
+                    if ( $row->status == "Y" )
+                        $status ='fa fa-check';
+                    else
+                        $status ='fa fa-remove';
+
+                    $status_url = route('status-dealer-commission',encrypt($row->id));
+                    $btn = '<a href="'.$status_url.'"><i class="'.$status.'"></i></a>';
+
+                    return $btn;
+                })
+                
+                
+                //->addColumn('edit', 'dealers.actionsEdit')
+                //->addColumn('activation', 'dealers.actionsStatus')
+                ->rawColumns(['edit', 'activation'])
+                ->make(true);
+        }
+
+        return view('adminpanel.dealers.dealer_commissionlist')->with('info',$info)->with('Dealer_ID',$Dealer_ID);
+    }
+
+    public function add_dealer_commission($id)
+    {
+        $Dealer_ID = $id;
+        $ID_dealer = decrypt($Dealer_ID);
+        $info = Dealers::where('id', '=', $ID_dealer)->get();
+        $savestatus= 'A';
+        return view('adminpanel.dealers.add_dealer_commission')->with(['savestatus' => $savestatus, 'Dealer_ID' => $Dealer_ID, 'info' => $info]);
+    }
+
+    public function save_dealer_commission(Request $request)
+    {
+        $dealerID = $request->Dealer_id;
+        $data_arry = array();
+        if ($request->savestatus == 'A') {
+            $request->validate([
+                'commission' => 'required',
+                'date' => 'required',
+                'status' => 'required'
+            ]);
+            
+            
+            $data_arry['commission'] = $request->commission;
+            $data_arry['date'] = $request->date;
+            $data_arry['status'] = $request->status;
+            $data_arry['dealerID'] = decrypt($request->Dealer_id);
+            
+        } else {
+            $id = decrypt($request->id);
+            if ($request->password) {
+                $request->validate([
+                    'commission' => 'required',
+                    'date' => 'required',
+                    'status' => 'required'
+                ]);
+                
+                $data_arry['commission'] = $request->commission;
+                $data_arry['date'] = $request->date;
+                $data_arry['status'] = $request->status;
+                $data_arry['dealerID'] = decrypt($request->Dealer_id);
+            } else {
+                $request->validate([
+                    'commission' => 'required',
+                    'date' => 'required',
+                    'status' => 'required'
+                ]);
+              
+                $data_arry['commission'] = $request->commission;
+                $data_arry['date'] = $request->date;
+                $data_arry['status'] = $request->status;
+                $data_arry['dealerID'] = decrypt($request->Dealer_id);
+            }
+        }
+        
+        if($request->savestatus == 'A'){
+           
+            $id= DealerCommission::create($data_arry);
+             \LogActivity::addToLog('New dealer commission'.$request->commission.' added('.$id->id.').');
+            return redirect('new-dealer-commission/'.$dealerID)->with('success', 'New dealer commission created successfully');
+        }else{
+            
+            $recid = $request->id;
+           
+            DealerCommission::where('id', decrypt($recid))->update($data_arry);
+            \LogActivity::addToLog('dealer commission edited ' . $request->commission . ' updated(' . decrypt($recid) . ').');
+            return redirect('/edit-dealer-commission/'.$recid.'')->with('success', 'dealer commission updated successfully');
+        }
+    }
+
+    public function edit_dealercommission($id)
+    {
+        $ID = decrypt($id);
+        $commisioninfo = DealerCommission::where('id', '=', $ID)->get();
+
+        $Dealer_ID = encrypt($commisioninfo[0]->dealerID);
+        $info = Dealers::where('id', '=',$commisioninfo[0]->dealerID )->get();
+        
+        $savestatus = 'E';
+        return view('adminpanel.dealers.add_dealer_commission')->with(['info' => $info, 'savestatus' => $savestatus, 'commisioninfo' => $commisioninfo, 'Dealer_ID' => $Dealer_ID]);
+    }
+
+    public function status_dealer_commission(Request $request)
+    {
+        $idD = decrypt($request->id);
+
+        $data =  DealerCommission::find($idD);
+
+        if ( $data->status == "Y" ) {
+
+            $data->status = 'N';
+            $data->save();
+            $id = $data->id;
+
+            \LogActivity::addToLog('dealers commission record '.$data->commission.' deactivated('.$id.')');
+
+            return redirect()->route('dealer-commission-list',encrypt($data->dealerID))
+            ->with('success', 'Record deactivate successfully.');
+
+        } else {
+
+            $data->status = "Y";
+            $data->save();
+            $id = $data->id;
+
+            \LogActivity::addToLog('dealers commission record '.$data->commission.' activated('.$id.')');
+
+            return redirect()->route('dealer-commission-list',encrypt($data->dealerID))
+            ->with('success', 'Record activate successfully.');
+        }
+
+    }
 }

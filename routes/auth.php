@@ -124,6 +124,13 @@ Route::group(['middleware' => ['auth:web', 'checkLastActivity']], function () {
     Route::post('get-state-cities', [DealersContoller::class, 'get_state_cities']) ->name('get-state-cities');
     Route::post('get-dealer-territories', [DealersContoller::class, 'get_dealer_territories']) ->name('get-dealer-territories');
     Route::get('/check_existing_dealercode_edit', [DealersContoller::class, 'check_existing_dealercode_edit'])->name('check_existing_dealercode_edit');
+
+    Route::get('new-dealer-commission/{id}', [DealersContoller::class, 'add_dealer_commission'])->name('new-dealer-commission');
+    Route::post('save-dealer-commission', [DealersContoller::class, 'save_dealer_commission'])->name('save-dealer-commission');
+    Route::get('dealer-commission-list/{id}', [DealersContoller::class, 'dealer_commission_list'])->name('dealer-commission-list');
+    Route::get('/edit-dealer-commission/{id}', [DealersContoller::class, 'edit_dealercommission'])->name('edit-dealer-commission');
+    Route::get('/status-dealer-commission/{id}', [DealersContoller::class, 'status_dealer_commission'])->name('status-dealer-commission');
+
     //dealers user
     Route::get('new-dealer-user/{id}', [DealersContoller::class, 'add_dealer_user'])->name('new-dealer-user');
     Route::post('save-dealer-user', [DealersContoller::class, 'save_dealer_user'])->name('save-dealer-user');
