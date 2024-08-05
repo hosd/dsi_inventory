@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Bankmodal;
 use App\Models\DealerCommission;
+use Excel;
+use App\Models\Dealer_stock;
+use App\Models\Productmodel;
+use App\Imports\TestImport;
 
 class DealersContoller extends Controller
 {
@@ -82,6 +86,12 @@ class DealersContoller extends Controller
                      $btn = '<a href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
                      return $btn;
                  })
+                 ->addColumn('stock', function ($row) {
+
+                    $edit_url = route('import-dealer-stock',encrypt($row->id));
+                     $btn = '<a href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                     return $btn;
+                 })
                 //  ->addColumn('total_paid', function ($row) {
 
                 //     $commission = DealerCommission::where('dealerID',$row->id)->where('status', 'Y')->where('is_delete',0)->sum('commission');
@@ -112,7 +122,7 @@ class DealersContoller extends Controller
                 
                 //->addColumn('edit', 'dealers.actionsEdit')
                 //->addColumn('activation', 'dealers.actionsStatus')
-                ->rawColumns(['edit', 'activation','users', 'commission'])
+                ->rawColumns(['edit', 'activation','users', 'commission','stock'])
                 ->make(true);
         }
 
@@ -688,6 +698,72 @@ class DealersContoller extends Controller
             return redirect()->route('dealer-commission-list',encrypt($data->dealerID))
             ->with('success', 'Record activate successfully.');
         }
-
+        
     }
+
+    public function import_dealer_stock($id)
+	{
+        $Dealer_ID = $id;
+        $ID_dealer = decrypt($Dealer_ID);
+        $info = Dealers::where('id', '=', $ID_dealer)->get();
+
+		return view('adminpanel.dealers.dealer_stock_upload')->with(['info' => $info]);
+	}
+
+    public function dealer_stock_bulk(Request $request){
+        $ID_dealer = $request->dealer_id;
+        
+		if($request->hasFile('import_file')){
+			$path = $request->file('import_file');
+			// $data = Excel::load($path, function($reader) {})->get();
+            $data = Excel::toCollection(new TestImport, $path);
+            
+			if(!empty($data) && $data->count()){
+                $recID = "";
+				foreach ($data->toArray() as $k => $item) {
+                    foreach ($item as $key => $value) {
+                        if($key!=0){
+                            if(!empty($value[0])){
+                                $dealer_stock = DB::table('dealer_stock')->where('productcode', $value[0])->where('dealerID', $ID_dealer)->first();
+                                $product = Productmodel::where('productcode', $value[0])->first();
+                                // var_dump($dealer_stock);die();
+                                if(empty($dealer_stock)){
+                                    $insert = array();
+                                    $insert[]= [
+                                        'categoryID' => $product->product_category, 
+                                        'productcode' => $value[0], 
+                                        'quantity' => $value[1], 
+                                        'reorder_quantity' => $value[2],
+                                        'dealerID' => $ID_dealer,
+                                        'userID' => auth()->user()->id,
+                                        'status' => 1,
+                                        'created_at' => date('Y-m-d H:i:s'),
+                                        'updated_at' => date('Y-m-d H:i:s')
+                                    ];
+                                    $recID = DB::table('dealer_stock')->insertGetId($insert[0]); 
+                                } else {
+                                    $insert[]= [
+                                        'categoryID' => $product->product_category,
+                                        'quantity' => $value[1], 
+                                        'reorder_quantity' => $value[2],
+                                        'userID' => auth()->user()->id,
+                                        'status' => 1,
+                                        'updated_at' => date('Y-m-d H:i:s')
+                                    ];
+                                    // var_dump($dealer_stock);die();
+                                    $recID = DB::table('dealer_stock')->where('id', $dealer_stock->id)->update($insert[0]);
+                                }
+                            }
+                        }
+                        
+                    }
+				}
+                return back()->with('success','Insert Record successfully.');
+			}else{
+                return back()->with('error','Please Check your file, Something is wrong there.');
+            }
+		}else{
+            return back()->with('error','Please select file.');
+        }
+	}
 }

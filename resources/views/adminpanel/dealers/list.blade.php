@@ -119,6 +119,7 @@
                                                 <th width="5%" align="center" >Activation</th>
                                                 <th width="5%" align="center" >Users</th>
                                                 <th width="5%" align="center" >Pay Commission</th>
+                                                <th width="5%" align="center" >Stock Upload</th>
                                                 <!-- <th width="5%" align="center" >Paid Total Commission</th> -->
                                             </tr>
                                         </thead>
@@ -220,6 +221,13 @@
                         //     data: 'total_paid',
                         //     name: 'total_paid'
                         // },
+                        {
+                            data: 'stock',
+                            name: 'stock',
+                            "className": "text-center",
+                            orderable: false,
+                            searchable: false
+                        },
                     ]
                 });
 

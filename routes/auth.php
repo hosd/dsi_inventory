@@ -130,6 +130,8 @@ Route::group(['middleware' => ['auth:web', 'checkLastActivity']], function () {
     Route::get('dealer-commission-list/{id}', [DealersContoller::class, 'dealer_commission_list'])->name('dealer-commission-list');
     Route::get('/edit-dealer-commission/{id}', [DealersContoller::class, 'edit_dealercommission'])->name('edit-dealer-commission');
     Route::get('/status-dealer-commission/{id}', [DealersContoller::class, 'status_dealer_commission'])->name('status-dealer-commission');
+    Route::get('/import-dealer-stock/{id}', [DealersContoller::class, 'import_dealer_stock'])->name('import-dealer-stock');
+    Route::post('dealer-stock-bulk-save',[DealersContoller::class, 'dealer_stock_bulk'])->name('dealer-stock-bulk-save');
 
     //dealers user
     Route::get('new-dealer-user/{id}', [DealersContoller::class, 'add_dealer_user'])->name('new-dealer-user');
