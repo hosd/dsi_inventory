@@ -724,7 +724,7 @@ class DealersContoller extends Controller
                     foreach ($item as $key => $value) {
                         if($key!=0){
                             if(!empty($value[0])){
-                                $dealer_stock = DB::table('dealer_stock')->where('productcode', $value[0])->where('dealerID', $ID_dealer)->first();
+                                $dealer_stock = DB::table('dealer_stock')->where('productcode', 'like', '%' . $value[0] . '%')->where('dealerID', $ID_dealer)->first();
                                 $product = Productmodel::where('productcode', $value[0])->first();
                                 // var_dump($dealer_stock);die();
                                 if(empty($dealer_stock)){
@@ -742,7 +742,8 @@ class DealersContoller extends Controller
                                     ];
                                     $recID = DB::table('dealer_stock')->insertGetId($insert[0]); 
                                 } else {
-                                    $insert[]= [
+                                    $insert1 = array();
+                                    $insert1[]= [
                                         'categoryID' => $product->product_category,
                                         'quantity' => $value[1], 
                                         'reorder_quantity' => $value[2],
@@ -751,7 +752,7 @@ class DealersContoller extends Controller
                                         'updated_at' => date('Y-m-d H:i:s')
                                     ];
                                     // var_dump($dealer_stock);die();
-                                    $recID = DB::table('dealer_stock')->where('id', $dealer_stock->id)->update($insert[0]);
+                                    $recID = DB::table('dealer_stock')->where('id', $dealer_stock->id)->update($insert1[0]);
                                 }
                             }
                         }
