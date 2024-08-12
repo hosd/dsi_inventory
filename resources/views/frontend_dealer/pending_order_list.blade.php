@@ -56,6 +56,7 @@
                                         <th scope="col">Customer Name</th>
                                         <th scope="col">Mobile Number</th>
                                         <!-- <th scope="col">View & Update</th> -->
+                                        <th scope="col">View</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -149,6 +150,13 @@
                         //     orderable: false,
                         //     searchable: false
                         // },
+                        {
+                            data: 'view',
+                            name: 'view',
+                            "className": "text-center",
+                            orderable: false,
+                            searchable: false
+                        },
                         
                     ]
                     

@@ -712,7 +712,12 @@ class DealerloginContoller extends Controller {
                                 $btn = '<a  class="btn btn-primary btn-sm" href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
                                 return $btn;
                             })
-                            ->rawColumns(['edit'])
+                            ->addColumn('view', function ($row) {
+                                $edit_url = route('view-order', $row['orderRef']);
+                                $btn = '<a  class="btn btn-primary btn-sm" href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                                return $btn;
+                            })
+                            ->rawColumns(['edit','view'])
                             ->make(true);
         }
 
@@ -819,6 +824,22 @@ class DealerloginContoller extends Controller {
         } else {
             return view('frontend_dealer.order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
         }
+    }
+
+    public function view_order($id) {
+
+        $token = $this->generatedToken();
+
+        $apidata = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
+        $resultdata = $apidata->json();
+        $orderinfo = $resultdata['orderdetails'];
+        $productlist = $resultdata['ProductList'];
+        $customer = $resultdata['Customer'];
+        $status = $orderinfo['status'];
+        
+        return view('frontend_dealer.view_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
     }
 
     public function updateOrderStatus(Request $request) {
