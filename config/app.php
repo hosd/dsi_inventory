@@ -244,6 +244,7 @@ return [
         'SmsLog' => App\Helpers\SmsLog::class,
         'EmailLog' => App\Helpers\EmailLog::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'HeaderHelper' => App\Helpers\HeaderHelper::class
     ],
 
 ];

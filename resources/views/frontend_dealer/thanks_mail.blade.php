@@ -75,7 +75,16 @@
                                         @endphp
                                         <strong>
                                             Order Date: {{ $orderDate->format('Y-m-d') }}<br/>
-                                            Payment Method : {{ $order['payment_option'] == 'cod' ? 'Cash On Delivery' : $order['payment_option'] }}<br/>
+                                            Payment Method : 
+                                            @if($order['payment_option'] == 'cod')
+                                                Cash On Delivery
+                                            @else
+                                                @php
+                                                    $paymentOption = $order['payment_option'];
+                                                    $paymentPlan = is_numeric($paymentOption) ? HeaderHelper::getPaymentPlan($paymentOption) : $paymentOption;
+                                                @endphp
+                                                {{ $paymentPlan }}
+                                            @endif<br/>
                                             Delivery Method : {{ $order['delivery_option'] }}<br/><br/><br/><br/>
                                         </strong>
                                     </td>
