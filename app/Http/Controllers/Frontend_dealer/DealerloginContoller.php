@@ -363,11 +363,22 @@ class DealerloginContoller extends Controller {
                 'reorder_quantity' => 'required|max_digits:5|numeric',
             ]);
 
+            $quantity = $request->quantity;
+            $reorder_quantity = $request->reorder_quantity;
+
+            // Remove leading zeros
+            $quantity = ltrim($quantity, '0');
+            $reorder_quantity = ltrim($reorder_quantity, '0');
+
+            // Ensure that if the result is an empty string, it should be 0
+            $quantity = $quantity === '' ? '0' : $quantity;
+            $reorder_quantity = $reorder_quantity === '' ? '0' : $reorder_quantity;
+
             $data_arry = array();
             $data_arry['categoryID'] = $request->categoryID;
             $data_arry['productcode'] = $request->productcode;
-            $data_arry['quantity'] = $request->quantity;
-            $data_arry['reorder_quantity'] = $request->reorder_quantity;
+            $data_arry['quantity'] = $quantity;
+            $data_arry['reorder_quantity'] = $reorder_quantity;
             $data_arry['dealerID'] = $request->dealerID;
             $data_arry['userID'] = auth()->user()->id;
             $data_arry['status'] = 1;
@@ -377,9 +388,20 @@ class DealerloginContoller extends Controller {
                 'reorder_quantity_edit' => 'required|max_digits:5|numeric',
             ]);
 
+            $quantity = $request->quantityedit;
+            $reorder_quantity = $request->reorder_quantity_edit;
+
+            // Remove leading zeros
+            $quantity = ltrim($quantity, '0');
+            $reorder_quantity = ltrim($reorder_quantity, '0');
+
+            // Ensure that if the result is an empty string, it should be 0
+            $quantity = $quantity === '' ? '0' : $quantity;
+            $reorder_quantity = $reorder_quantity === '' ? '0' : $reorder_quantity;
+
             $data_arry = array();
-            $data_arry['quantity'] = $request->quantityedit;
-            $data_arry['reorder_quantity'] = $request->reorder_quantity_edit;
+            $data_arry['quantity'] = $quantity;
+            $data_arry['reorder_quantity'] = $reorder_quantity;
             // $data_arry['dealerID'] = $request->dealerID;
             //$data_arry['userID'] = auth()->user()->id;    
         } else {

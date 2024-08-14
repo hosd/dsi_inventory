@@ -81,7 +81,7 @@
                                             <div class="mb-3 inp-holder">
                                                 <label for="InputQuantity" class="form-label ">Quantity <span style="color: red;">*</span></label>
                                                 
-                                                <input type="text" name="quantity" id="quantity" class="form-control"  >
+                                                <input type="number" name="quantity" id="quantity" class="form-control"  >
                                                
                                                 </div>
                                         </div>
@@ -97,7 +97,7 @@
                                             </div>
                                             <div class="mb-3 inp-holder">
                                                 <label for="InputReorderQ" class="form-label ">Re-order Quantity <span style="color: red;">*</span></label>
-                                                <input type="text" class="form-control" id="reorder_quantity" name="reorder_quantity" >
+                                                <input type="number" class="form-control" id="reorder_quantity" name="reorder_quantity" >
                                             </div>
                                         </div>
                                     </div>
@@ -133,7 +133,7 @@
                                                 <div class="mb-3 inp-holder">
                                                     <label for="InputQuantity" class="form-label ">Quantity <span style="color: red;">*</span></label>
 
-                                                    <input type="text" name="quantityedit" id="quantityedit" class="form-control"  >
+                                                    <input type="number" name="quantityedit" id="quantityedit" class="form-control"  >
 
                                                 </div>
                                             </div>
@@ -141,7 +141,7 @@
 
                                                 <div class="mb-3 inp-holder">
                                                     <label for="InputReorderQ" class="form-label ">Re-order Quantity <span style="color: red;">*</span></label>
-                                                    <input type="text" class="form-control" id="reorder_quantity_edit" name="reorder_quantity_edit" >
+                                                    <input type="number" class="form-control" id="reorder_quantity_edit" name="reorder_quantity_edit" >
                                                 </div>
                                             </div>
                                         </div>
