@@ -120,6 +120,7 @@
                                                 <th width="5%" align="center" >Users</th>
                                                 <th width="5%" align="center" >Pay Commission</th>
                                                 <th width="5%" align="center" >Stock Upload</th>
+                                                <th width="5%">Delete</th>
                                                 <!-- <th width="5%" align="center" >Paid Total Commission</th> -->
                                             </tr>
                                         </thead>
@@ -228,9 +229,31 @@
                             orderable: false,
                             searchable: false
                         },
+                        {
+                            data: 'blockdealer',
+                            name: 'blockdealer',
+                            orderable: false,
+                            searchable: false
+                        },
                     ]
                 });
 
+            });
+
+            $('#user_types').on('click', '.btn-delete', function(e) {
+                event.preventDefault();
+                const url = $(this).attr('href');
+                var id = $(this).val();
+                swal({
+                    title: 'Are you sure?',
+                    text: 'This record will be permanantly deleted!',
+                    icon: 'warning',
+                    buttons: ["Cancel", "Yes"],
+                }).then(function(value) {
+                    if (value == true) {
+                        window.location.replace("blockdealer/" + id);
+                    }
+                });
             });
         </script>
     </x-slot>

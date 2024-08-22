@@ -26,6 +26,7 @@ class Dealers extends Model
         'bankID',
         'vBranchname',
         'vBranchcode',
-        'vAccountnum'
+        'vAccountnum',
+        'is_delete'
     ];
 }

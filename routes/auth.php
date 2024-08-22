@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:web', 'checkLastActivity']], function () {
     Route::post('get-state-cities', [DealersContoller::class, 'get_state_cities']) ->name('get-state-cities');
     Route::post('get-dealer-territories', [DealersContoller::class, 'get_dealer_territories']) ->name('get-dealer-territories');
     Route::get('/check_existing_dealercode_edit', [DealersContoller::class, 'check_existing_dealercode_edit'])->name('check_existing_dealercode_edit');
+    Route::get('blockdealer/{id}', [DealersContoller::class, 'block'])->name('blockdealer');
 
     Route::get('new-dealer-commission/{id}', [DealersContoller::class, 'add_dealer_commission'])->name('new-dealer-commission');
     Route::post('save-dealer-commission', [DealersContoller::class, 'save_dealer_commission'])->name('save-dealer-commission');

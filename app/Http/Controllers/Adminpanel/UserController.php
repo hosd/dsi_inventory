@@ -170,7 +170,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
-    {
+    { 
        $id = $request->id;
         $this->validate($request, [
             'name' => 'required',
@@ -180,9 +180,9 @@ class UserController extends Controller
         ]);
         $roleName = $request->roles;
         $role=  Role::select('id')->where('name',$request->roles)->get();
-        $input['roleID'] =$role[0]->id;
 
         $input = $request->all();
+        $input['roleID'] =$role[0]->id;
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {

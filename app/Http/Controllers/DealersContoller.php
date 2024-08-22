@@ -46,7 +46,7 @@ class DealersContoller extends Controller
     {
         $savestatus= 'A';
         $title = 'New';
-        $count = Dealers::select('dealers.*')->get();
+        $count = Dealers::select('dealers.*')->where('is_delete',  0)->get();
         $province =Province::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('province_name_en','ASC')->get();
         $District =District::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('district_name_en','ASC')->get();
         $city =City::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('city_name_en','ASC')->get();
@@ -56,7 +56,7 @@ class DealersContoller extends Controller
 
      public function datalist(Request $request)
     {
-         $count = Dealers::select('dealers.*')->get();
+         $count = Dealers::select('dealers.*')->where('is_delete',  0)->get();
         if ($request->ajax()) {
             
             $data = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
@@ -64,6 +64,7 @@ class DealersContoller extends Controller
                     ->join('districts', 'address.districtID', '=', 'districts.id')
                     ->join('cities', 'address.cityID', '=', 'cities.id')
                     ->select('dealers.*','cities.city_name_en as city','provinces.province_name_en as province','districts.district_name_en as state')
+                    ->where('dealers.is_delete', 0)
                     ->orderBy('dealers.name','ASC')
                     ->get();
             return Datatables::of($data)
@@ -122,7 +123,8 @@ class DealersContoller extends Controller
                 
                 //->addColumn('edit', 'dealers.actionsEdit')
                 //->addColumn('activation', 'dealers.actionsStatus')
-                ->rawColumns(['edit', 'activation','users', 'commission','stock'])
+                ->addColumn('blockdealer', 'adminpanel.dealers.actionsBlock')   
+                ->rawColumns(['edit', 'activation','users', 'commission','stock', 'blockdealer'])
                 ->make(true);
         }
 
@@ -240,7 +242,7 @@ class DealersContoller extends Controller
      */
     public function edit($id)
     {
-        $count = Dealers::select('dealers.*')->get();
+        $count = Dealers::select('dealers.*')->where('is_delete',  0)->get();
         $title = 'Edit';
         $ID = decrypt($id);
         $info = Dealers::where('id', '=', $ID)->get();
@@ -767,4 +769,20 @@ class DealersContoller extends Controller
             return back()->with('error','Please select file.');
         }
 	}
+
+    public function block(Request $request)
+    {
+        $request->validate([
+            // 'status' => 'required'
+        ]);
+
+        $data =  Dealers::find($request->id);
+        $data->is_delete = 1;
+        $data->save();
+        $id = $data->id;
+
+        \LogActivity::addToLog('Dealer record '.$data->name.' deleted('.$id.').');
+
+        return redirect()->route('dealers-list')->with('success', 'Record deleted successfully.');
+    }
 }

@@ -47,7 +47,8 @@ class DealerapiController extends Controller {
             ->join('address', 'dealers.addressID', '=', 'address.id')
             ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
             ->where('address.districtID', $data['district'])
-            ->where('dealers.status', '1');
+            ->where('dealers.status', '1')
+            ->where('dealers.is_delete', 0);
 
         if ($data['city']) {
             $query = $query->where('address.cityID', $data['city']);
@@ -63,6 +64,7 @@ class DealerapiController extends Controller {
                 ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
                 ->where('address.districtID', $data['district'])
                 ->where('dealers.status', '1')
+                ->where('dealers.is_delete', 0)
                 ->get();
         }
 
@@ -104,7 +106,8 @@ class DealerapiController extends Controller {
         'Contact_person' => $dealer->Contact_person,
         'opening_hours' => $dealer->opening_hours,
         'vLatitude' => $dealer->vLatitude,
-        'vLongitude' => $dealer->vLongitude,        
+        'vLongitude' => $dealer->vLongitude,
+        'is_delete' => $dealer->is_delete
             ];
         });
 
