@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use App\Models\Province;
     
 class OrderController extends Controller
 { 
@@ -47,12 +48,18 @@ class OrderController extends Controller
         
         return view('adminpanel.order.pending_order_list');
     }
-        private function generatedToken() {
+    
+    private function generatedToken() {
 
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::withOptions([
+            'verify' => false // Disable SSL verification
+        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            'email' => $username,
+            'password' => $password
+        ]);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {
@@ -72,18 +79,23 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-         public function datalist(Request $request)
+    public function datalist(Request $request)
     {
-         $count = Productmodel::select('*')->get();
-               if ($request->ajax()) {
+        $count = Productmodel::select('*')->get();
+        if ($request->ajax()) {
             $token = $this->generatedToken();
-            $delaerID = auth()->user()->dealerID;
-            //$delaerID = 1;
+            $dealerID = auth()->user()->dealerID;
+            //$dealerID = 1;
             $status = 'pending';
 
-            $apidata = Http::withHeaders([
-                        'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . '');
+            $apidata = Http::withOptions([
+                'verify' => false
+            ])->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+                'status' => $status,
+                'dealerID' => $dealerID
+            ]);
 
             $resultdata = $apidata->json();
             if (empty($resultdata['orderList'])) {
@@ -111,14 +123,19 @@ class OrderController extends Controller
                     } else {
                         return 'Dealer information not available';
                     }
-                            })
-                            ->addColumn('edit', function ($row) {
-                                $edit_url = route('pending-order-details', $row['orderRef']);
-                                $btn = '<a   href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
-                                return $btn;
-                            })
-                            ->rawColumns(['edit','dealer'])
-                            ->make(true);
+                    })
+                    ->addColumn('edit', function ($row) {
+                        $edit_url = route('pending-order-details', $row['orderRef']);
+                        $btn = '<a   href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                        return $btn;
+                    })
+                    ->addColumn('change_dealer', function ($row) {
+                        $edit_url = route('change-dealer-details', $row['orderRef']);
+                        $btn = '<a   href="' . $edit_url . '"><i class="fa fa-edit"></i></a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['edit','dealer','change_dealer'])
+                    ->make(true);
         }
 
         return view('adminpanel.order.pending_order_list')->with('count',$count);
@@ -226,9 +243,14 @@ class OrderController extends Controller
     {
         $token = $this->generatedToken();
 
-        $apidata = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
+        $apidata = Http::withOptions([
+            'verify' => false
+        ])->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+            'orderID' => $id 
+        ]);
+
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];
@@ -249,8 +271,6 @@ class OrderController extends Controller
 
         //return view('masterdata.complain_category.edit', ['data' => $data]);
         //return view('masterdata.complain_category.edit');
-  
-        
     }
     
     public function activation(Request $request)
@@ -353,5 +373,160 @@ class OrderController extends Controller
             return response()->json(false);
         }
         
+    }
+
+    public function change_dealer($id)
+    {
+        $token = $this->generatedToken();
+
+        $apidata = Http::withOptions([
+            'verify' => false
+        ])->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+            'orderID' => $id 
+        ]);
+
+        $resultdata = $apidata->json();
+        $orderinfo = $resultdata['orderdetails'];
+        $customer = $resultdata['Customer']; 
+        $dealerID= $orderinfo['dealerID'];
+        $productlist = $resultdata['ProductList'];
+        $dealerinfo = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
+                    ->join('provinces', 'address.provinceID', '=', 'provinces.id')
+                    ->join('districts', 'address.districtID', '=', 'districts.id')
+                    ->join('cities', 'address.cityID', '=', 'cities.id')
+                    ->select('dealers.*','cities.id as city','provinces.id as province','districts.id as state','address.vAddressline1','address.vAddressline2')
+                    ->where('dealers.id',$dealerID)
+                    ->first();
+        
+        $dealers = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
+                            ->select('dealers.*')
+                            ->where('is_delete', 0)
+                            ->where('status', 1)
+                            ->where('address.districtID', $dealerinfo->state)
+                            ->get();
+
+        $provinces =Province::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('province_name_en','ASC')->get();
+
+        $districts = District::select('*')->where('status', 'Y')->where('is_delete', 0)->where('province_id', $dealerinfo->province)->orderBy('district_name_en','ASC')->get();
+        $cities = City::select('*')->where('is_delete', 0)->where('district_id', $dealerinfo->state)->orderBy('city_name_en','ASC')->get();
+        
+        return view('adminpanel.order.change_dealer_details')
+                ->with([
+                    'orderinfo' => $orderinfo, 
+                    'customer' => $customer, 
+                    'dealerinfo' => $dealerinfo, 
+                    'dealers' => $dealers, 
+                    'provinces' => $provinces,
+                    'districts' => $districts,
+                    'cities' => $cities,
+                    'productlist' => $productlist
+                ]);
+    }
+
+    public function get_dealer(Request $request)
+    {
+        $districtID =  $request->districtID;
+        $cityID =  $request->cityID;
+        $productList = $request->productList;
+
+        $query = DB::table('dealers')
+            ->join('address', 'dealers.addressID', '=', 'address.id')
+            ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
+            ->where('address.districtID', $districtID)
+            ->where('dealers.status', '1')
+            ->where('dealers.is_delete', 0);
+
+        if($cityID){
+            $query = $query->where('address.cityID', $cityID);
+        }
+
+        $selectedDealers = $query->get();
+        
+        // Check if $selectedDealers is empty and $cityID is true
+        if (count($selectedDealers) == 0 && $cityID && $districtID) {
+            // Reload $selectedDealers with  $districtID
+            $selectedDealers = DB::table('dealers')
+                ->join('address', 'dealers.addressID', '=', 'address.id')
+                ->select('dealers.*', 'address.vNo', 'address.vAddressline1', 'address.vAddressline2', 'address.districtID', 'address.cityID', 'address.postcode', 'address.provinceID')
+                ->where('address.districtID',  $districtID)
+                ->where('dealers.status', '1')
+                ->where('dealers.is_delete', 0)
+                ->get();
+        }
+
+        //  Filter dealers based on dealer stock matching JSON data
+        $filteredDealers = $selectedDealers->filter(function ($dealer) use ($productList) {
+            $productList = collect($productList);
+            $dealerID = $dealer->id;
+
+            // Check if all products in the JSON list are available in the dealer's stock list
+            $hasAllProducts = $productList->every(function ($product) use ($dealerID) {
+                return DB::table('dealer_stock')
+                        ->where('dealerID', $dealerID)
+                        ->where('productcode', $product['ProductCode'])
+                        ->where('quantity', '>=', $product['Quantity'])
+                         ->where('status', '1')
+                        ->exists();
+            });
+
+            //var_dump($hasAllProducts);  
+            return $hasAllProducts;
+        }); //die();
+        // Create an array of selected dealers with their details
+        $selectedDealersData = $filteredDealers->map(function ($dealer) {
+            return [
+                'id' => $dealer->id,
+                'name' => $dealer->name,
+            ];
+        });
+
+        // Create the final JSON response
+        $response = [
+            'data' => $selectedDealersData,
+        ];
+
+        return response()->json($response);
+    }
+
+    public function update_dealer(Request $request) {
+        $token = $this->generatedToken();
+
+        $dealer = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
+                            ->select('dealers.*','address.vAddressline1', 'address.vAddressline2')
+                            ->where('dealers.id', $request->dealerID)
+                            ->first();
+        // dd($dealer);die();
+        $apidata = Http::withOptions([
+            'verify' => false
+        ])->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://uat.dsityreshop.com/api/update-dealer', [
+            'dealer_id' => $dealer->id,
+            'name' => $dealer->name,
+            'phone' => $dealer->phone,
+            'email' => $dealer->email,
+            'address1' => $dealer->vAddressline1,
+            'address2' => $dealer->vAddressline2,
+            'opening_hours' => $dealer->opening_hours,
+            'latitude' => $dealer->vLatitude,
+            'longitude' => $dealer->vLongitude,
+            'dealer_code' => $dealer->dealercode,
+            'orderID' => $request->orderID,
+            'orderRef' => $request->orderRef
+        ]);
+
+        $resultdata = $apidata->json();
+        // dd($resultdata);die();
+
+        if($resultdata) {
+            \LogActivity::addToAPILog('Dealer changed - orderRef: ' . $request->orderRef . ' DealerId: ' . $request->dealerID . '. API response :' . $resultdata['message']);
+            return redirect('change-dealer-details/'.$request->orderRef)->with('success', 'Dealer changed successfully. Order number :' . $request->orderRef);
+        } else {
+            \LogActivity::addToAPILog('Failed to change dealer - orderRef: ' . $request->orderRef . ' DealerId: ' . $request->dealerID . '. API response :' . $resultdata['error']);
+            return redirect('change-dealer-details/'.$request->orderRef)->with('success', 'Failed to change dealer. Order number :' . $request->orderRef);
+        }
+    
     }
 }

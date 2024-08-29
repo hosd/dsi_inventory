@@ -122,6 +122,7 @@
                                                 <th>Customer Contact No</th>
                                                 <th>Grand Total</th>
                                                 <th width="50px">View</th>
+                                                <th width="50px">Change Dealer</th>
                                                 
                                             </tr>
                                         </thead>
@@ -166,7 +167,8 @@
                        
                     },
                     order: [ 1, 'DESC' ],
-                    columns: [{
+                    columns: [
+                        {
                             data: 'DT_RowIndex',
                             name: 'id'
                         },
@@ -194,16 +196,19 @@
                             data: 'mobile',
                             name: 'mobile'
                         },
-                        
                         {
                             data: 'ordervalue',
                             name: 'ordervalue'
                         },
-                        
-                        
                         {
                             data: 'edit',
                             name: 'edit',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'change_dealer',
+                            name: 'change_dealer',
                             orderable: false,
                             searchable: false
                         }

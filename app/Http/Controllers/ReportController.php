@@ -354,6 +354,8 @@ class ReportController extends Controller
             if($request->dealer_id)
             {
                 $dealer_id = $request->dealer_id;
+            } else {
+                $dealer_id = '';
             }
             
             if($request->ordered_from)
@@ -370,9 +372,15 @@ class ReportController extends Controller
             
             $resultdata = array();
             $token = $this->generatedToken();
-            $apidata = Http::withHeaders([
-                        'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $dealer_id . '&ordered_from=' . $ordered_from. '&ordered_to=' . $ordered_to);
+            $apidata = Http::withOptions([
+                'verify' => false
+            ])->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders', [
+                'dealer_id' => $dealer_id,
+                'ordered_from' => $ordered_from,
+                'ordered_to' => $ordered_to
+            ]);
 
             $resultdata = $apidata->json();
             
@@ -427,7 +435,12 @@ class ReportController extends Controller
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::withOptions([
+            'verify' => false // Disable SSL verification
+        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            'email' => $username,
+            'password' => $password
+        ]);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {

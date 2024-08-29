@@ -111,7 +111,7 @@
                             </table>
                             <br>
                             <div class="clearfix"></div>
-                            @if(!empty($dealerinfo))
+                            @if(!empty($dealerinfo) && isset($dealerinfo[0]))
                             <table class="table table-bordered" style="width:100%; border-style: hidden">
                                 <tbody style="border-style: hidden">
                                     <tr style="border-style: hidden">

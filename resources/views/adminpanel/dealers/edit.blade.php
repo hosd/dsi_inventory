@@ -15,6 +15,7 @@ $vOpeninghours= '';
 $vContactperson = '';
 $vLatitude= '';
 $vLongitude = '';
+$tType ='';
 
 }else{
 
@@ -38,6 +39,7 @@ $bankID = $info[0]->bankID;
 $vBranchname = $info[0]->vBranchname;
 $vBranchcode = $info[0]->vBranchcode;
 $vAccountnum =$info[0]->vAccountnum;
+$tType =$info[0]->tType;
 }
 @endphp
 <x-app-layout>
@@ -139,8 +141,8 @@ $vAccountnum =$info[0]->vAccountnum;
                                 <div class="row">
                                     <section class="col col-6">
                                         <label class="label">Opening Hours <span style=" color: red;">*</span></label>
-                                        <label class="input inp-holder">
-                                            <input type="text" id="vOpeninghours" name="vOpeninghours" required value="{{$vOpeninghours}}">
+                                        <label class="textarea inp-holder">
+                                            <textarea id="vOpeninghours" rows="4" name="vOpeninghours" required value="">{{$vOpeninghours}}</textarea>
                                         </label>
                                     </section>
                                     <section class="col col-6">
@@ -156,13 +158,19 @@ $vAccountnum =$info[0]->vAccountnum;
                                 </div>
                                 <div class="row">
                                     <section class="col col-6">
-                                        <label class="label">Dealer Code </label>
+                                        <label class="label">Dealer Type <span style=" color: red;">*</span></label>
+                                        @foreach($types as $row)
+                                            <section class="col col-4">
+                                                <input type="checkbox" name="tType[]" id="tType{{  $row->id }}" value="{{ $row->id }}" <?php if(in_array($row->id, explode(',', $tType))){?>checked <?php } ?> style="padding: 10px; border-radius: 4px;margin: 10px;">{{$row->name}}
+                                            </section>
+                                        @endforeach
+                                    </section>
+                                    <section class="col col-6">
+                                        <label class="label">Dealer Code <span style=" color: red;">*</span></label>
                                         <label class="input inp-holder">
-                                            <input type="text" id="dealercode" name="dealercode"  value="{{$dealercode}}">
+                                            <input type="text" id="dealercode" name="dealercode"  value="{{$dealercode}}" required>
                                         </label>
-                                    </section>    
-
-
+                                    </section> 
                                 </div>
                                 
                                 <div class=" cleafix"></div>
@@ -288,7 +296,7 @@ $vAccountnum =$info[0]->vAccountnum;
                                             
                                     </section>
                                     <section class="col col-6">
-                                        <label class="label">Branch Name </label>
+                                        <label class="label">Branch Name <span style=" color: red;">*</span></label>
                                         <label class="input inp-holder">
                                             <input type="text" id="vBranchname" name="vBranchname"  value="{{$vBranchname}}">
                                         </label>
@@ -297,13 +305,13 @@ $vAccountnum =$info[0]->vAccountnum;
                                 </div>
                                 <div class="row" >
                                 <section class="col col-6">
-                                        <label class="label">Branch Code </label>
+                                        <label class="label">Branch Code <span style=" color: red;">*</span></label>
                                         <label class="input inp-holder">
                                             <input type="text" id="vBranchcode" name="vBranchcode"  value="{{$vBranchcode}}">
                                         </label>
                                 </section>
                                 <section class="col col-6">
-                                        <label class="label">Account Number </label>
+                                        <label class="label">Account Number <span style=" color: red;">*</span></label>
                                         <label class="input inp-holder">
                                             <input type="text" id="vAccountnum" name="vAccountnum"  value="{{$vAccountnum}}">
                                         </label>
@@ -428,6 +436,12 @@ $vAccountnum =$info[0]->vAccountnum;
                         status: {
                             required: true,
                         },
+                        tType: {
+                            required: true,
+                        },
+                        dealercode: {
+                            required: true,
+                        },
                         cityID: {
                             required: true,
                         },
@@ -486,6 +500,12 @@ $vAccountnum =$info[0]->vAccountnum;
                         },
                         status: {
                             required: "Please the status",
+                        },
+                        tType: {
+                            required: "Please select a dealer type",
+                        },
+                        dealercode: {
+                            required: "Please enter a dealer code",
                         },
                         districtID: {
                             required: "Please select a state",

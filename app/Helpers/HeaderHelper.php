@@ -3,6 +3,7 @@
 
 namespace App\Helpers;
 use App\Models\Paymentplanmodal;
+use App\Models\DealerType;
 
 class HeaderHelper
 {
@@ -13,6 +14,13 @@ class HeaderHelper
                 ->find($recId);
 
         return $plan->bank.' '.$plan->name;
+    }
+
+    public static function get_dealer_type_name($recId)
+    {
+    	$dealer = DealerType::find($recId);
+        
+        return $dealer->name;
     }
 
 }

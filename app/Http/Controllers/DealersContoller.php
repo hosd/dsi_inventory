@@ -25,6 +25,8 @@ use Excel;
 use App\Models\Dealer_stock;
 use App\Models\Productmodel;
 use App\Imports\TestImport;
+use App\Models\DealerType;
+use App\Helpers\HeaderHelper;
 
 class DealersContoller extends Controller
 {
@@ -51,12 +53,17 @@ class DealersContoller extends Controller
         $District =District::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('district_name_en','ASC')->get();
         $city =City::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('city_name_en','ASC')->get();
         $bank =Bankmodal::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
-        return view('adminpanel.dealers.index')->with('title',$title)->with('District',$District)->with('savestatus',$savestatus)->with('city',$city)->with('province',$province)->with('count',$count)->with('bank',$bank);
+        $types =DealerType::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
+
+        return view('adminpanel.dealers.index')->with(['title' => $title, 'District' => $District, 'savestatus' => $savestatus, 'city' => $city, 'province' => $province, 'count' => $count, 'bank' => $bank, 'types' => $types]);
     }
 
-     public function datalist(Request $request)
+    public function datalist(Request $request)
     {
-         $count = Dealers::select('dealers.*')->where('is_delete',  0)->get();
+        $count = Dealers::select('dealers.*')->where('is_delete',  0)->get();
+
+        $types =DealerType::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
+
         if ($request->ajax()) {
             
             $data = Dealers::join('address', 'dealers.addressID', '=', 'address.id')
@@ -65,8 +72,15 @@ class DealersContoller extends Controller
                     ->join('cities', 'address.cityID', '=', 'cities.id')
                     ->select('dealers.*','cities.city_name_en as city','provinces.province_name_en as province','districts.district_name_en as state')
                     ->where('dealers.is_delete', 0)
-                    ->orderBy('dealers.name','ASC')
-                    ->get();
+                    ->orderBy('dealers.name','ASC');
+
+            if($request->type_id)
+            {
+                $data = $data->where('dealers.tType', implode(',', $request->type_id));
+            }
+
+            $data = $data->get();
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status', function($row){
@@ -120,15 +134,28 @@ class DealersContoller extends Controller
                     $btn = '<a href="' . $edit_url . '"><i class=" fa fa-user">&nbsp;'. $count .'</i></a>';
                     return $btn;
                 }) 
-                
+                ->addColumn('type_name', function ($row) {
+                    if($row->tType) {
+                        $type = [];
+                        $types = explode(",",$row->tType);
+                        foreach ($types as $item) {
+                            $type_name = HeaderHelper::get_dealer_type_name($item);
+                            $type[] = $type_name;
+                        }
+                        $name = implode(', ', $type);
+                    } else {
+                        $name = '';
+                    }
+                    return $name;
+                 })
                 //->addColumn('edit', 'dealers.actionsEdit')
                 //->addColumn('activation', 'dealers.actionsStatus')
                 ->addColumn('blockdealer', 'adminpanel.dealers.actionsBlock')   
-                ->rawColumns(['edit', 'activation','users', 'commission','stock', 'blockdealer'])
+                ->rawColumns(['edit', 'activation','users', 'commission','stock', 'blockdealer', 'type_name'])
                 ->make(true);
         }
 
-        return view('adminpanel.dealers.list')->with('count',$count);
+        return view('adminpanel.dealers.list')->with(['count' => $count, 'types' => $types]);
     }
 
     /**
@@ -151,7 +178,8 @@ class DealersContoller extends Controller
                 'provinceID' => 'required',
                 'districtID' => 'required',
                 'cityID' => 'required',
-              	'dealercode' => 'max:30',
+              	'dealercode' => 'required|max:30',
+              	'tType' => 'required',
                 'bankID'  => 'required',
                 'vBranchname'  => 'required|max:100',
                 'vBranchcode'  => 'required|max:50',
@@ -173,6 +201,8 @@ class DealersContoller extends Controller
                     return $query->where('id', '!=', decrypt($request->id))
                                  ->whereNotNull('dealercode');})
                                 ],
+                                
+              	'tType' => 'required',
                 'bankID'  => 'required',
                 'vBranchname'  => 'required|max:100',
                 'vBranchcode'  => 'required|max:50',
@@ -189,7 +219,8 @@ class DealersContoller extends Controller
         $data_arry['vLatitude'] = $request->vLatitude;
         $data_arry['vLongitude'] = $request->vLongitude;
         $data_arry['status'] = $request->status;        
-        $data_arry['dealercode'] =$request->dealercode;
+        $data_arry['dealercode'] =$request->dealercode;        
+        $data_arry['tType'] =implode(',', $request->tType);
         $data_arry['bankID'] =$request->bankID;
         $data_arry['vBranchname'] =$request->vBranchname;
         $data_arry['vBranchcode'] =$request->vBranchcode;
@@ -253,7 +284,9 @@ class DealersContoller extends Controller
         $addressinfo = Address::where('id','=',$addressID)->get();
         $savestatus = 'E';
         $bank =Bankmodal::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
-        return view('adminpanel.dealers.edit')->with('title',$title)->with('info',$info)->with('savestatus',$savestatus)->with('province',$province)->with('District',$District)->with('city',$city)->with('addressinfo',$addressinfo)->with('count',$count)->with('bank',$bank);
+        $types =DealerType::select('*')->where('status', 'Y')->where('is_delete',  0)->orderBy('name','ASC')->get();
+
+        return view('adminpanel.dealers.edit')->with(['title' => $title, 'info' => $info, 'savestatus' => $savestatus, 'province' => $province, 'District' => $District, 'city' => $city, 'addressinfo' => $addressinfo, 'count' => $count, 'bank' => $bank, 'types' => $types]);
         //return view('masterdata.complain_category.edit', ['data' => $data]);
         //return view('masterdata.complain_category.edit');
     }
@@ -294,7 +327,7 @@ class DealersContoller extends Controller
 
     }
     
-     public function get_state_cities(Request $request)
+    public function get_state_cities(Request $request)
     {
         $districtID =  $request->districtID;
         $city['data'] = City::select('*')->where("district_id", $districtID)->where('is_delete',  0)->orderBy('city_name_en','ASC')->get();

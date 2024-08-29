@@ -84,7 +84,35 @@
                 <!-- row -->
                 <div class="row">
                     <!-- NEW WIDGET START -->
+                    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div id="search-log-form" class="smart-form">
+                            <form name="search-form" id="search-form" method="get" >
+                                <fieldset>
+                                    <div class="row">
+                                    <section class="col col-4">
+                                        <label class="label">Dealer Type</label>
+                                            <select class="select2" name="type_id[]" id="type_id" required="" multiple>
+                                                <option value=""></option>
+                                                @foreach($types as $row)
+                                                <option value="{{  $row->id }}"> {{$row->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <i></i>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer class="col col-10">
+                                    <button id="button1id" name="button1id" type="submit"class="btn btn-primary">
+                                        Search
+                                    </button>
+                                    <a href="{{ route('dealers-list') }}">
+                                        <button name="reset" id="reset" type="button" class="btn btn-default"> Clear</button>
+                                    </a>
 
+                                </footer>
+                            </form>
+                        </div>
+                    </article>
                     <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                         <!-- Widget ID (each widget will need unique ID)-->
@@ -106,8 +134,9 @@
                                     <table class="table table-bordered data-table" width="100%">
                                         <thead>
                                             <tr >
-                                                <th width="5%">No</th>
-                                                <th width="10%">Dealer Name</th>  
+                                                <th width="4%">No</th>
+                                                <th width="10%">Dealer Name</th>
+                                                <th width="10%">Type</th>    
                                                 <th width="10%">Code</th>
                                                 <th width="10%">Email</th>
                                                 <th width="10%">Phone Number</th>
@@ -115,13 +144,13 @@
                                                 <th width="10%">Territory</th>
                                                 <th width="10%">Town</th>
                                                 <th width="10%">Status</th>
-                                                <th width="5%">Edit</th>
-                                                <th width="5%" align="center" >Activation</th>
-                                                <th width="5%" align="center" >Users</th>
-                                                <th width="5%" align="center" >Pay Commission</th>
-                                                <th width="5%" align="center" >Stock Upload</th>
-                                                <th width="5%">Delete</th>
-                                                <!-- <th width="5%" align="center" >Paid Total Commission</th> -->
+                                                <th width="4%">Edit</th>
+                                                <th width="4%" align="center" >Activation</th>
+                                                <th width="4%" align="center" >Users</th>
+                                                <th width="4%" align="center" >Pay Commission</th>
+                                                <th width="4%" align="center" >Stock Upload</th>
+                                                <th width="4%">Delete</th>
+                                                <!-- <th width="4%" align="center" >Paid Total Commission</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -154,7 +183,17 @@
                 var table = $('.data-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('dealers-list') }}",
+                    ajax: {
+                    headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        },
+                        url: "{{ route('dealers-list') }}",
+                       
+                        data: function (d) {
+                            
+                            d.type_id = $('#type_id').val();
+                        }
+                    },
                     order: [ 1, 'asc' ],
                     columns: [{
                             data: 'DT_RowIndex',
@@ -163,6 +202,10 @@
                         {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'type_name',
+                            name: 'type_name'
                         },
                         {
                             data: 'dealercode',
@@ -238,22 +281,17 @@
                     ]
                 });
 
-            });
-
-            $('#user_types').on('click', '.btn-delete', function(e) {
-                event.preventDefault();
-                const url = $(this).attr('href');
-                var id = $(this).val();
-                swal({
-                    title: 'Are you sure?',
-                    text: 'This record will be permanantly deleted!',
-                    icon: 'warning',
-                    buttons: ["Cancel", "Yes"],
-                }).then(function(value) {
-                    if (value == true) {
-                        window.location.replace("blockdealer/" + id);
-                    }
+                $('#search-form').on('submit', function(e) {
+                    table.draw();
+                    e.preventDefault();
                 });
+
+                $('#reset').click(function(){
+                    $("#type_id").val(null).trigger('change');
+                    table.draw();
+                    e.preventDefault();
+                });
+
             });
         </script>
     </x-slot>

@@ -47,13 +47,20 @@ class CancelledOrderController extends Controller
         
         return view('adminpanel.order.pending_order_list');
     }
-        private function generatedToken() {
+
+    private function generatedToken() {
 
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::withOptions([
+            'verify' => false // Disable SSL verification
+        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            'email' => $username,
+            'password' => $password
+        ]);
         $result = $response->json();
+
         //dd($result);
         if ($response->successful()) {
             //dd($result);
@@ -77,13 +84,18 @@ class CancelledOrderController extends Controller
          $count = Productmodel::select('*')->get();
                if ($request->ajax()) {
             $token = $this->generatedToken();
-            $delaerID = auth()->user()->dealerID;
-            //$delaerID = 1;
+            $dealerID = auth()->user()->dealerID;
+            //$dealerID = 1;
             $status = 'cancelled';
 
-            $apidata = Http::withHeaders([
-                        'Authorization' => 'Bearer ' . $token,
-                    ])->post('https://dsityreshop.com/api/get-pickup-orders?status=' . $status . '&dealerID=' . '');
+            $apidata = Http::withOptions([
+                'verify' => false
+            ])->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+                'status' => $status,
+                'dealerID' => $dealerID
+            ]);
 
             $resultdata = $apidata->json(); 
             if (empty($resultdata['orderList'])) {
@@ -139,9 +151,14 @@ class CancelledOrderController extends Controller
     {
         $token = $this->generatedToken();
 
-        $apidata = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-order-details?orderID=' . $id);
+        $apidata = Http::withOptions([
+            'verify' => false
+        ])->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+            'orderID' => $id 
+        ]);
+
         $resultdata = $apidata->json();
         $orderinfo = $resultdata['orderdetails'];
         $productlist = $resultdata['ProductList'];

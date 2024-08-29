@@ -51,9 +51,15 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
 
         $resultdata = array();
         $token = $this->generatedToken();
-        $apidata = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $token,
-                ])->post('https://dsityreshop.com/api/get-completed-dealer-orders?dealer_id=' . $this->dealer_id . '&ordered_from=' . $this->ordered_from. '&ordered_to=' . $this->ordered_to);
+        $apidata = Http::withOptions([
+            'verify' => false
+        ])->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders', [
+            'dealer_id' => $this->dealer_id,
+            'ordered_from' => $this->ordered_from,
+            'ordered_to' => $this->ordered_to
+        ]);
 
         $resultdata = $apidata->json();
         $resultdata = collect($resultdata);
@@ -161,7 +167,12 @@ class DealerCommission implements FromCollection, WithHeadings, ShouldAutoSize, 
         $username = 'admin@tekgeeks.net';
         $password = 'admin123';
 
-        $response = Http::post('https://dsityreshop.com/api/create-access-token?email=' . $username . '&password=' . $password);
+        $response = Http::withOptions([
+            'verify' => false // Disable SSL verification
+        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            'email' => $username,
+            'password' => $password
+        ]);
         $result = $response->json();
         //dd($result);
         if ($response->successful()) {

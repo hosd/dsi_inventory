@@ -233,6 +233,9 @@ Route::group(['middleware' => ['auth:web', 'checkLastActivity']], function () {
     Route::get('completed-order-details/{id}', [CompletedOrderController::class, 'edit'])->name('completed-order-details');
     Route::get('cancelled-order-list', [CancelledOrderController::class, 'datalist'])->name('cancelled-order-list');
     Route::get('cancelled-order-details/{id}', [CancelledOrderController::class, 'edit'])->name('cancelled-order-details');
+    Route::get('change-dealer-details/{id}', [OrderController::class, 'change_dealer'])->name('change-dealer-details');
+    Route::post('update-dealer', [OrderController::class, 'update_dealer'])->name('update-dealer');
+    Route::post('get-dealer', [OrderController::class, 'get_dealer']) ->name('get-dealer');
     
     Route::get('report-list', [ReportController::class, 'index'])->name('report-list');
     Route::get('dealer-commission-report', [ReportController::class, 'dealer_commission'])->name('dealer-commission-report');
