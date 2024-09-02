@@ -99,7 +99,7 @@ class DealerloginContoller extends Controller {
             $monthly_total = 0;
         } else {
             foreach ($resultdata['orderList'] as $key => $row) {
-                $monthly_total = $monthly_total + ($row['quantity'] * $row['dealer_charge']);
+                $monthly_total = $monthly_total + ((float)$row['quantity'] * (float)$row['dealer_charge']);
             }
         }
 
