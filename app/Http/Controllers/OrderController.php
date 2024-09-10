@@ -55,8 +55,8 @@ class OrderController extends Controller
         $password = 'admin123';
 
         $response = Http::withOptions([
-            'verify' => false // Disable SSL verification
-        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            // 'verify' => false // Disable SSL verification
+        ])->post('https://dsityreshop.com/api/create-access-token', [
             'email' => $username,
             'password' => $password
         ]);
@@ -89,10 +89,10 @@ class OrderController extends Controller
             $status = 'pending';
 
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+            ])->post('https://dsityreshop.com/api/get-pickup-orders', [
                 'status' => $status,
                 'dealerID' => $dealerID
             ]);
@@ -244,10 +244,10 @@ class OrderController extends Controller
         $token = $this->generatedToken();
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+        ])->post('https://dsityreshop.com/api/get-order-details', [
             'orderID' => $id 
         ]);
 
@@ -380,10 +380,10 @@ class OrderController extends Controller
         $token = $this->generatedToken();
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+        ])->post('https://dsityreshop.com/api/get-order-details', [
             'orderID' => $id 
         ]);
 
@@ -499,10 +499,10 @@ class OrderController extends Controller
                             ->first();
         // dd($dealer);die();
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/update-dealer', [
+        ])->post('https://dsityreshop.com/api/update-dealer', [
             'dealer_id' => $dealer->id,
             'name' => $dealer->name,
             'phone' => $dealer->phone,

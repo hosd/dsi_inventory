@@ -373,10 +373,10 @@ class ReportController extends Controller
             $resultdata = array();
             $token = $this->generatedToken();
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders', [
+            ])->post('https://dsityreshop.com/api/get-completed-dealer-orders', [
                 'dealer_id' => $dealer_id,
                 'ordered_from' => $ordered_from,
                 'ordered_to' => $ordered_to
@@ -436,8 +436,8 @@ class ReportController extends Controller
         $password = 'admin123';
 
         $response = Http::withOptions([
-            'verify' => false // Disable SSL verification
-        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            // 'verify' => false // Disable SSL verification
+        ])->post('https://dsityreshop.com/api/create-access-token', [
             'email' => $username,
             'password' => $password
         ]);

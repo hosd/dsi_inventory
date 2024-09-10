@@ -54,8 +54,8 @@ class CancelledOrderController extends Controller
         $password = 'admin123';
 
         $response = Http::withOptions([
-            'verify' => false // Disable SSL verification
-        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            // 'verify' => false // Disable SSL verification
+        ])->post('https://dsityreshop.com/api/create-access-token', [
             'email' => $username,
             'password' => $password
         ]);
@@ -89,10 +89,10 @@ class CancelledOrderController extends Controller
             $status = 'cancelled';
 
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+            ])->post('https://dsityreshop.com/api/get-pickup-orders', [
                 'status' => $status,
                 'dealerID' => $dealerID
             ]);
@@ -152,10 +152,10 @@ class CancelledOrderController extends Controller
         $token = $this->generatedToken();
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+        ])->post('https://dsityreshop.com/api/get-order-details', [
             'orderID' => $id 
         ]);
 

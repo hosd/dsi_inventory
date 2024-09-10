@@ -54,10 +54,10 @@ class DealerloginContoller extends Controller {
         $status = 'pending';
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+        ])->post('https://dsityreshop.com/api/get-pickup-orders', [
             'status' => $status,
             'dealerID' => $dealerID
         ]);
@@ -83,10 +83,10 @@ class DealerloginContoller extends Controller {
         if($dealer_id){
             $token = $this->generatedToken();
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-completed-dealer-orders', [
+            ])->post('https://dsityreshop.com/api/get-completed-dealer-orders', [
                 'dealer_id' => $dealer_id,
                 'ordered_from' => $ordered_from,
                 'ordered_to' => $ordered_to
@@ -720,10 +720,10 @@ class DealerloginContoller extends Controller {
             $status = 'pending';
 
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+            ])->post('https://dsityreshop.com/api/get-pickup-orders', [
                 'status' => $status,
                 'dealerID' => $dealerID
             ]);
@@ -797,10 +797,10 @@ class DealerloginContoller extends Controller {
             $status = 'completed';
 
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+            ])->post('https://dsityreshop.com/api/get-pickup-orders', [
                 'status' => $status,
                 'dealerID' => $dealerID
             ]);
@@ -839,10 +839,10 @@ class DealerloginContoller extends Controller {
             $status = 'cancelled';
 
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-pickup-orders', [
+            ])->post('https://dsityreshop.com/api/get-pickup-orders', [
                 'status' => $status,
                 'dealerID' => $dealerID
             ]);
@@ -885,10 +885,10 @@ class DealerloginContoller extends Controller {
         $dealerID = auth()->user()->dealerID;
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+        ])->post('https://dsityreshop.com/api/get-order-details', [
             'orderID' => $id
         ]);
 
@@ -922,10 +922,10 @@ class DealerloginContoller extends Controller {
         $dealerID = auth()->user()->dealerID;
 
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+        ])->post('https://dsityreshop.com/api/get-order-details', [
             'orderID' => $id
         ]);
 
@@ -957,10 +957,10 @@ class DealerloginContoller extends Controller {
 
         if($status == "cancelled"){
             $apidata1 = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+            ])->post('https://dsityreshop.com/api/get-order-details', [
                 'orderID' => $orderRef
             ]);
 
@@ -978,10 +978,10 @@ class DealerloginContoller extends Controller {
             $token = $this->generatedToken();
 
             $apidata2 = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/get-order-details', [
+            ])->post('https://dsityreshop.com/api/get-order-details', [
                 'orderID' => $orderRef
             ]);
 
@@ -1022,10 +1022,10 @@ class DealerloginContoller extends Controller {
         }
         
         $apidata = Http::withOptions([
-            'verify' => false
+            // 'verify' => false
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->post('https://uat.dsityreshop.com/api/update-order', [
+        ])->post('https://dsityreshop.com/api/update-order', [
             'orderID' => $orderID,
             'orderRef' => $orderRef,
             'status' => $status,
@@ -1046,8 +1046,8 @@ class DealerloginContoller extends Controller {
         $password = 'admin123';
 
         $response = Http::withOptions([
-            'verify' => false // Disable SSL verification
-        ])->post('https://uat.dsityreshop.com/api/create-access-token', [
+            // 'verify' => false // Disable SSL verification
+        ])->post('https://dsityreshop.com/api/create-access-token', [
             'email' => $username,
             'password' => $password
         ]);
@@ -1087,10 +1087,10 @@ class DealerloginContoller extends Controller {
                 $token = $this->generatedToken();
 
                 $apidata = Http::withOptions([
-                    'verify' => false
+                    // 'verify' => false
                 ])->withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->get('https://uat.dsityreshop.com/api/get-completed-dealer-orders', [
+                ])->get('https://dsityreshop.com/api/get-completed-dealer-orders', [
                     'dealer_id' => $dealer_id,
                     'ordered_from' => $ordered_from,
                     'ordered_to' => $ordered_to
@@ -1157,10 +1157,10 @@ class DealerloginContoller extends Controller {
             $token = $this->generatedToken();
             
             $apidata = Http::withOptions([
-                'verify' => false
+                // 'verify' => false
             ])->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
-            ])->post('https://uat.dsityreshop.com/api/send-sales-invoice', [
+            ])->post('https://dsityreshop.com/api/send-sales-invoice', [
                 'orderRef' => $orderRef
             ]);
 
