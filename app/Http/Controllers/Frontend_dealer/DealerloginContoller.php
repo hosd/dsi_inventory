@@ -882,6 +882,7 @@ class DealerloginContoller extends Controller {
     public function view_order_details($id) {
 
         $token = $this->generatedToken();
+        $dealerID = auth()->user()->dealerID;
 
         $apidata = Http::withOptions([
             'verify' => false
@@ -892,22 +893,33 @@ class DealerloginContoller extends Controller {
         ]);
 
         $resultdata = $apidata->json();
-        $orderinfo = $resultdata['orderdetails'];
-        $productlist = $resultdata['ProductList'];
-        $customer = $resultdata['Customer'];
-        $status = $orderinfo['status'];
-        if ($status == 'completed') {
-            return view('frontend_dealer.completed_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
-        } elseif ($status == 'cancelled') {
-            return view('frontend_dealer.cancelled_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+        if(isset($resultdata['orderdetails'])){
+            if($resultdata['orderdetails']['dealerID'] == $dealerID) {
+                $orderinfo = $resultdata['orderdetails'];
+                $productlist = $resultdata['ProductList'];
+                $customer = $resultdata['Customer'];
+                $status = $orderinfo['status'];
+                // dd($orderinfo);
+                if ($status == 'completed') {
+                    return view('frontend_dealer.completed_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+                } elseif ($status == 'cancelled') {
+                    return view('frontend_dealer.cancelled_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+                } else {
+                    return view('frontend_dealer.order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+                }
+            } else {
+                return view('frontend_dealer.order_dealer_not_match');
+            }
         } else {
-            return view('frontend_dealer.order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+            return view('frontend_dealer.order_not_exists');
         }
+        
     }
 
     public function view_order($id) {
 
         $token = $this->generatedToken();
+        $dealerID = auth()->user()->dealerID;
 
         $apidata = Http::withOptions([
             'verify' => false
@@ -918,12 +930,21 @@ class DealerloginContoller extends Controller {
         ]);
 
         $resultdata = $apidata->json();
-        $orderinfo = $resultdata['orderdetails'];
-        $productlist = $resultdata['ProductList'];
-        $customer = $resultdata['Customer'];
-        $status = $orderinfo['status'];
         
-        return view('frontend_dealer.view_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+        if(isset($resultdata['orderdetails'])){
+            if($resultdata['orderdetails']['dealerID'] == $dealerID) {
+                $orderinfo = $resultdata['orderdetails'];
+                $productlist = $resultdata['ProductList'];
+                $customer = $resultdata['Customer'];
+                $status = $orderinfo['status'];
+                
+                return view('frontend_dealer.view_order_details')->with('orderinfo', $orderinfo)->with('productlist', $productlist)->with('customer', $customer);
+            } else {
+                return view('frontend_dealer.order_dealer_not_match');
+            }
+        } else {
+            return view('frontend_dealer.order_not_exists');
+        }
     }
 
     public function updateOrderStatus(Request $request) {

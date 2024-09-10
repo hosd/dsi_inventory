@@ -444,8 +444,7 @@ $tType =$info[0]->tType;
                             maxlength: 50,
                         },
                         vOpeninghours: {
-                            required: true,
-                            maxlength: 50,
+                            required: true
                         },
                         bankID: {
                             required: true,
@@ -506,8 +505,7 @@ $tType =$info[0]->tType;
                             maxlength: "Maximum length is 50",
                         },
                         vOpeninghours: {
-                            required: "Please enter the opening hours number",
-                            maxlength: "Maximum length is 20",
+                            required: "Please enter the opening hours number"
                         },
                         bankID: {
                             required: "Please select a bank",

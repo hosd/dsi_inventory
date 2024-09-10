@@ -81,6 +81,7 @@
                             @csrf
                             <fieldset>
                                 <div class="row ">
+                                    <?php /* ?>
                                     <section class="col col-6">
                                         <label class="label">Region <span style=" color: red;">*</span></label>
 
@@ -100,6 +101,7 @@
                                         </label>
 
                                     </section>
+                                    <?php */ ?>
                                     <div id="district_div">
                                         <section class="col col-6">
                                             <label class="label">Territory <span style=" color: red;">*</span></label>
@@ -121,8 +123,6 @@
 
                                         </section>
                                     </div>
-                                </div>
-                                <div class="row ">
                                     <div id="city_div">
                                         <section class="col col-6">
                                             <label class="label">Town <span style=" color: red;">*</span></label>
@@ -144,6 +144,8 @@
                                                 
                                         </section>
                                     </div>
+                                </div>
+                                <div class="row ">
                                     <div id="dealer_div">
                                         <section class="col col-6">
                                             <label class="label">Dealer <span style=" color: red;">*</span></label>
