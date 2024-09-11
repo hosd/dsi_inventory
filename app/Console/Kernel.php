@@ -27,9 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('product:api')->dailyAt('11:30');
-        $schedule->command('productprice:api')->dailyAt('11:30');
-        $schedule->command('productdiscount:api')->dailyAt('11:30');
+        $schedule->command('product:api')->dailyAt('23:30');
+        $schedule->command('productprice:api')->dailyAt('23:30');
+        $schedule->command('productdiscount:api')->dailyAt('23:30');
     }
 
     /**

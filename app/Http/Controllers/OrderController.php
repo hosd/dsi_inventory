@@ -404,12 +404,12 @@ class OrderController extends Controller
                             ->select('dealers.*')
                             ->where('is_delete', 0)
                             ->where('status', 1)
-                            ->where('address.districtID', $dealerinfo->state)
+                            ->where('dealers.id', $dealerID)
                             ->get();
 
         $provinces =Province::select('*')->where('status','Y')->where('is_delete',  0)->orderBy('province_name_en','ASC')->get();
 
-        $districts = District::select('*')->where('status', 'Y')->where('is_delete', 0)->where('province_id', $dealerinfo->province)->orderBy('district_name_en','ASC')->get();
+        $districts = District::select('*')->where('status', 'Y')->where('is_delete', 0)->orderBy('district_name_en','ASC')->get();
         $cities = City::select('*')->where('is_delete', 0)->where('district_id', $dealerinfo->state)->orderBy('city_name_en','ASC')->get();
         
         return view('adminpanel.order.change_dealer_details')

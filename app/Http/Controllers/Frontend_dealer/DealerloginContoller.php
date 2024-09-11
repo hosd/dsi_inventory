@@ -1090,7 +1090,7 @@ class DealerloginContoller extends Controller {
                     // 'verify' => false
                 ])->withHeaders([
                     'Authorization' => 'Bearer ' . $token,
-                ])->get('https://dsityreshop.com/api/get-completed-dealer-orders', [
+                ])->post('https://dsityreshop.com/api/get-completed-dealer-orders', [
                     'dealer_id' => $dealer_id,
                     'ordered_from' => $ordered_from,
                     'ordered_to' => $ordered_to
@@ -1125,7 +1125,7 @@ class DealerloginContoller extends Controller {
                             return $row['productcode'];
                         })
                         ->addColumn('dealer_charge', function ($row) {
-                            return $row['quantity'] * $row['dealer_charge'];
+                            return (float)$row['quantity'] * (float)$row['dealer_charge'];
                         })
                         ->addColumn('quantity', function ($row) {
                             return $row['quantity'];

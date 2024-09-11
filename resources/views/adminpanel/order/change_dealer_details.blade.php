@@ -285,7 +285,7 @@
                             }
 
                         }
-                        dropdown += ' </select></select></div> <i></i> </label></section>';
+                        dropdown += ' </select></div> <i></i> </label></section>';
                         $("#district_div").append(dropdown);
                     }
                 });
@@ -346,26 +346,25 @@
 
                         $('#dealer_div').html('');
                         var len = 0;
-                        if (response['data'] != null) {
-                            len = response['data'].length;
+                        if (response && typeof response['data'] === 'object') {
+                            var dataKeys = Object.keys(response['data']); // Get keys of the object
+                            len = dataKeys.length;
                         }
-
                         $(".existing_dealer").html('');
 
                         // Read data and create <option >
                         var dropdown = ' <section class="col col-6"> <label class="label">Dealer <span style=" color: red;">*</span></label><label class="select inp-holder"><div class="existing_dealer"> <select name="dealerID" id="dealerID" required=""> <option value="" ></option>';
                         if (len > 0) {
 
-                            for (var i = 0; i < len; i++) {
-
-                                var id = response['data'][i].id;
-                                var name = response['data'][i].name;
+                            dataKeys.forEach(function(key) {
+                                var id = response['data'][key].id;
+                                var name = response['data'][key].name;
 
                                 dropdown += "<option value='" + id + "'>" + name + "</option>";
-                            }
+                            });
 
                         }
-                        dropdown += ' </select></select></div> <i></i> </label></section>';
+                        dropdown += ' </select></div> <i></i> </label></section>';
                         $("#dealer_div").append(dropdown);
                     }
                 });
@@ -386,29 +385,27 @@
                         productList : @json($productlist)
                     },
                     success: function (response) {
-
                         $('#dealer_div').html('');
                         var len = 0;
-                        if (response['data'] != null) {
-                            len = response['data'].length;
+                        if (response && typeof response['data'] === 'object') {
+                            var dataKeys = Object.keys(response['data']); // Get keys of the object
+                            len = dataKeys.length;
                         }
-
                         $(".existing_dealer").html('');
 
                         // Read data and create <option >
                         var dropdown = ' <section class="col col-6"> <label class="label">Dealer <span style=" color: red;">*</span></label><label class="select inp-holder"><div class="existing_dealer"> <select name="dealerID" id="dealerID" required=""> <option value="" ></option>';
                         if (len > 0) {
 
-                            for (var i = 0; i < len; i++) {
-
-                                var id = response['data'][i].id;
-                                var name = response['data'][i].name;
+                            dataKeys.forEach(function(key) {
+                                var id = response['data'][key].id;
+                                var name = response['data'][key].name;
 
                                 dropdown += "<option value='" + id + "'>" + name + "</option>";
-                            }
+                            });
 
                         }
-                        dropdown += ' </select></select></div> <i></i> </label></section>';
+                        dropdown += ' </select></div> <i></i> </label></section>';
                         $("#dealer_div").append(dropdown);
                     }
                 });
