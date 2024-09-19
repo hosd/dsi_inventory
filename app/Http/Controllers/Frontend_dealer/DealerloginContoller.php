@@ -210,19 +210,19 @@ class DealerloginContoller extends Controller {
         ])->orderBy('name', 'ASC');
 
         if (in_array(1, $dealerTypes) && !in_array(2, $dealerTypes) && !in_array(3, $dealerTypes)) {
-            $query->whereNotIn('id', [1, 7, 8, 5]);
+            $query->whereNotIn('id', [1, 7, 8]);
         } elseif (in_array(2, $dealerTypes) && !in_array(1, $dealerTypes) && !in_array(3, $dealerTypes)) {
             $query->where('id', 7);
         } elseif (in_array(3, $dealerTypes) && !in_array(1, $dealerTypes) && !in_array(2, $dealerTypes)) {
             $query->where('id', 8);
         } elseif (in_array(1, $dealerTypes) && in_array(2, $dealerTypes) && !in_array(3, $dealerTypes)) {
-            $query->whereNotIn('id', [1, 5, 8]);
+            $query->whereNotIn('id', [1, 8]);
         } elseif (in_array(1, $dealerTypes) && in_array(3, $dealerTypes) && !in_array(2, $dealerTypes)) {
-            $query->whereNotIn('id', [1, 5, 7]);
+            $query->whereNotIn('id', [1, 7]);
         } elseif (in_array(2, $dealerTypes) && in_array(3, $dealerTypes) && !in_array(1, $dealerTypes)) {
             $query->whereIn('id', [7, 8]);
         } elseif (in_array(1, $dealerTypes) && in_array(2, $dealerTypes) && in_array(3, $dealerTypes)) {
-            $query->whereNotIn('id', [1, 5]);
+            $query->whereNotIn('id', [1]);
         }
         // Get the categories
         $category = $query->get();
@@ -372,23 +372,30 @@ class DealerloginContoller extends Controller {
 
     public function get_product_codes(Request $request) {
         $catID = $request->cateID;
-
         $dealerID = auth()->user()->dealerID;
-        //DB::enableQueryLog();
-        $products['data'] = Productmodel::select('*')
-                ->where("product_category", $catID)
-                ->where('status', 1)
-                ->where('product_subcategory', '!=', 12)
-                ->whereNotIn('productcode', function ($query)use ($dealerID) {
-                    $query->select('productcode')
-                    ->from('dealer_stock')
-                    ->where('dealerID', $dealerID);
-                })
-                ->orderBy('productcode', 'ASC')
-                ->get();
-        // dd(\DB::getQueryLog());
+    
+        $result = Productmodel::select('*');
+        if ($catID == "7") {
+            $result = $result->where("master_group", 'PRTY');
+        } else if ($catID == "5"){
+            $result = $result->where("master_group", 'GENX');
+        } else {
+            $result = $result->where("product_category", $catID)
+                            ->whereNull("master_group");
+        }
+    
+        $result->where('status', 1)
+               ->where('product_subcategory', '!=', 12)
+               ->whereNotIn('productcode', function ($query) use ($dealerID) {
+                   $query->select('productcode')
+                         ->from('dealer_stock')
+                         ->where('dealerID', $dealerID);
+               })
+               ->orderBy('productcode', 'ASC');
+    
+        $products['data'] = $result->get();
         return response()->json($products);
-    }
+    }    
 
     public function store(Request $request) {
         //var_dump($request->productcode); die();

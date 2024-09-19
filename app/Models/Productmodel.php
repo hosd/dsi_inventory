@@ -38,6 +38,7 @@ class Productmodel extends Model
         'product_group_val',
         'discount',
         'compatible_models',
-        'compatible_makes'
+        'compatible_makes',
+        'master_group'
     ];
 }
