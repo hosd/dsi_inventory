@@ -118,7 +118,7 @@
                                     <td>{{ $item['LabelName'] }} - {{ $item['ProductCode'] }}</td>
                                     <td align="right">{{ $item['Quantity'] }}</td>
                                     <td align="right">{{ number_format($item['UnitPrice'], 2) }}&nbsp;</td>
-                                    <td align="right">{{ number_format($item['discount'], 2) }}&nbsp;</td>
+                                    <td align="right">{{ number_format($item['itemdiscount'], 2) }}&nbsp;</td>
                                     <td align="right">{{ number_format($item['subtotal'], 2) }}&nbsp;</td>
                                     </tr>
                                 @endforeach
