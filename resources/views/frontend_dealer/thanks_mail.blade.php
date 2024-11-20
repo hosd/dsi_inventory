@@ -131,6 +131,15 @@
                                     $total = $total + $order['delivery_fee'];
                                 @endphp
                                 @endif
+                                @if($order['fixing_fee'] != 0)
+                                <tr>
+                                    <td colspan="2" align="right">Fixing Fee (LKR)</td>
+                                    <td colspan="4" align="right">{{ number_format($order['fixing_fee'], 2) }}&nbsp;</td>
+                                </tr>
+                                @php
+                                $total = $total + $order['fixing_fee'];
+                                @endphp
+                                @endif
                                 @if($order['cod_fee'] != 0)
                                 <tr>
                                     <td colspan="2" align="right">Cash on Delivery Fee (LKR)</td>
